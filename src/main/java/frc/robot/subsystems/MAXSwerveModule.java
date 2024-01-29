@@ -161,4 +161,12 @@ public class MAXSwerveModule {
   public void resetEncoders() {
     m_drivingEncoder.setPosition(0);
   }
+
+  public CANSparkMax getDrivingMotor() {
+    return m_drivingSparkMax;
+  }
+
+  public CANSparkMax getTurningMotor() {
+    return m_turningSparkMax;
+  }
 }
