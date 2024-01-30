@@ -35,11 +35,14 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ClimberSubsystem m_climber = new ClimberSubsystem();
   private final Intake m_intake = new Intake();
+  private final Shooter m_shooter = new Shooter();
 
   // The driver's controller
   XboxController driveStick = new XboxController(OIConstants.kDriverControllerPort);
   XboxController subStick = new XboxController(OIConstants.kOperatorControllerPort);
 
+  
+  JoystickButton driveA = new JoystickButton(driveStick, XboxController.Button.kA.value);
   JoystickButton subA = new JoystickButton(subStick, XboxController.Button.kA.value);
   JoystickButton subB = new JoystickButton(subStick, XboxController.Button.kB.value);
   JoystickButton subX = new JoystickButton(subStick, XboxController.Button.kX.value);
@@ -56,6 +59,7 @@ public class RobotContainer {
     m_robotDrive.setDefaultCommand(new DefaultSwerveCommand(m_robotDrive, driveStick));
     m_climber.setDefaultCommand(new DefaultClimberCommand(m_climber, subStick));
     m_intake.setDefaultCommand(new DefaultIntakeCommand(m_intake));
+    m_shooter.setDefaultCommand(new DefaultShooterCommand(m_shooter));
   }
 
   /**
@@ -87,6 +91,8 @@ public class RobotContainer {
 
     subY.whileTrue(
       new IndexOutwards(m_intake)
+    driveA.whileTrue(
+        new ShootForward(m_shooter)
     );
   }
 

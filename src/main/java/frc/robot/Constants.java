@@ -145,4 +145,10 @@ public final class Constants {
     public static final int rightClimberID = 5;
     public static final int leftClimberID = 6;
   }
+
+  public static final class ShooterConstants {
+    public static final int rightShooterID = 1;
+    public static final int leftShooterID = 2;
+  }
+  
 }
