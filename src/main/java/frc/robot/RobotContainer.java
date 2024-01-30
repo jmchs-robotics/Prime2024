@@ -91,6 +91,8 @@ public class RobotContainer {
 
     subY.whileTrue(
       new IndexOutwards(m_intake)
+    );
+    
     driveA.whileTrue(
         new ShootForward(m_shooter)
     );
