@@ -18,8 +18,8 @@ import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.DefaultSwerveCommand;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.commands.*;
+import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -35,9 +35,16 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final Intake m_intake = new Intake();
 
   // The driver's controller
   XboxController driveStick = new XboxController(OIConstants.kDriverControllerPort);
+  XboxController subStick = new XboxController(OIConstants.kOperatorControllerPort);
+
+  JoystickButton subA = new JoystickButton(subStick, XboxController.Button.kA.value);
+  JoystickButton subB = new JoystickButton(subStick, XboxController.Button.kB.value);
+  JoystickButton subX = new JoystickButton(subStick, XboxController.Button.kX.value);
+  JoystickButton subY = new JoystickButton(subStick, XboxController.Button.kY.value);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -48,6 +55,7 @@ public class RobotContainer {
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(new DefaultSwerveCommand(m_robotDrive, driveStick));
+    m_intake.setDefaultCommand(new DefaultIntakeCommand(m_intake));
   }
 
   /**
@@ -60,10 +68,26 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driveStick, Button.kR1.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
+    // new JoystickButton(driveStick, Button.kR1.value)
+    //     .whileTrue(new RunCommand(
+    //         () -> m_robotDrive.setX(),
+    //         m_robotDrive));
+
+    subA.whileTrue(
+      new IntakeInwards(m_intake)
+    );
+
+    subB.whileTrue(
+      new IntakeOutwards(m_intake)
+    );
+
+    subX.whileTrue(
+      new IndexInwards(m_intake)
+    );
+
+    subY.whileTrue(
+      new IndexOutwards(m_intake)
+    );
   }
 
   /**
