@@ -141,6 +141,11 @@ public final class Constants {
     public static final double kFreeSpeedRpm = 5676;
   }
 
+  public static final class IntakeConstants {
+    public static final int intakeID = 3;
+    public static final int indexID = 4;
+  }
+
   public static final class ClimberConstants {
     public static final int rightClimberID = 5;
     public static final int leftClimberID = 6;

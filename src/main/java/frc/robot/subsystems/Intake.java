@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
 
@@ -10,8 +11,8 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
 
-        intakeMotor = new TalonFX(3);
-        indexMotor = new TalonFX(4);
+        intakeMotor = new TalonFX(IntakeConstants.intakeID);
+        indexMotor = new TalonFX(IntakeConstants.indexID);
 
     }
 
@@ -33,7 +34,7 @@ public class Intake extends SubsystemBase {
         indexMotor.set(speed);
     }
 
-    public void stopindexMotor() {
+    public void stopIndexMotor() {
         indexMotor.stopMotor();
     }
 
@@ -44,7 +45,7 @@ public class Intake extends SubsystemBase {
 
     public void stopBothMotors() {
         stopIntakeMotor();
-        stopindexMotor();
+        stopIndexMotor();
     }
     
 }
