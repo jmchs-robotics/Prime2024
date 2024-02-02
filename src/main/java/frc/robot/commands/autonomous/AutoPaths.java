@@ -117,7 +117,117 @@ public class AutoPaths extends Command {
 
     }  
 
-    // public Command redAmpSide3Note() {}
+    public Command redAmpSide3Note() {
+
+        Trajectory redAmp3NoteTrajectoryForward = TrajectoryGenerator.generateTrajectory(
+            new Pose2d(0, 0, new Rotation2d(0)), 
+            List.of(new Translation2d(Units.inchesToMeters(32.0), 0)),
+            new Pose2d(Units.inchesToMeters(64.0), 0, new Rotation2d(0)), config);
+
+        Trajectory redAmp3NoteTrajectoryBackward = TrajectoryGenerator.generateTrajectory(
+            new Pose2d(Units.inchesToMeters(64.0), 0, new Rotation2d(0)), 
+            List.of(new Translation2d(Units.inchesToMeters(32.0), 0)),
+            new Pose2d(0, 0, new Rotation2d(0)), config);
+        
+        Trajectory redAmp3NoteTrajectory3rdNoteForward = TrajectoryGenerator.generateTrajectory(
+            new Pose2d(0, 0, new Rotation2d(0)),
+            List.of(new Translation2d(Units.inchesToMeters(63.5 / 2), Units.inchesToMeters(57.0 / 2))),
+            new Pose2d(Units.inchesToMeters(63.5), Units.inchesToMeters(57.0), new Rotation2d(Units.degreesToRadians(41.9))),
+            config);
+
+        Trajectory redAmp3NoteTrajectory3rdNoteBackward = TrajectoryGenerator.generateTrajectory(
+            new Pose2d(Units.inchesToMeters(63.5), Units.inchesToMeters(57.0), new Rotation2d(Units.degreesToRadians(41.9))),
+            List.of(new Translation2d(Units.inchesToMeters(63.5 / 2), Units.inchesToMeters(57.0 / 2))),
+            new Pose2d(0, 0, new Rotation2d(0)),
+            config);
+
+        Trajectory redAmp3NoteTrajectoryGTFO = TrajectoryGenerator.generateTrajectory(
+            new Pose2d(0, 0, new Rotation2d(0)), 
+            List.of(new Translation2d(Units.inchesToMeters(87.0), 0),
+                new Translation2d(Units.inchesToMeters(87.0 + 96.2), Units.inchesToMeters(46.9))),
+            new Pose2d(Units.inchesToMeters(87.0 + 96.2 + 90), Units.inchesToMeters(46.9), new Rotation2d(0)), config);
+
+        var thetaController = new ProfiledPIDController(
+            AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+        SwerveControllerCommand redAmp3NoteCommandForward = new SwerveControllerCommand(
+            redAmp3NoteTrajectoryForward,
+            m_drive::getPose, 
+            DriveConstants.kDriveKinematics, 
+            new PIDController(AutoConstants.kPXController, 0, 0),
+            new PIDController(AutoConstants.kPYController, 0, 0), 
+            thetaController,
+            m_drive::setModuleStates,
+            m_drive);
+
+        SwerveControllerCommand redAmp3NoteCommandBackward = new SwerveControllerCommand(
+            redAmp3NoteTrajectoryBackward,
+            m_drive::getPose, 
+            DriveConstants.kDriveKinematics, 
+            new PIDController(AutoConstants.kPXController, 0, 0),
+            new PIDController(AutoConstants.kPYController, 0, 0), 
+            thetaController,
+            m_drive::setModuleStates,
+            m_drive);
+
+        SwerveControllerCommand redAmp3NoteCommand3rdNoteForward = new SwerveControllerCommand(
+            redAmp3NoteTrajectory3rdNoteForward,
+            m_drive::getPose, 
+            DriveConstants.kDriveKinematics, 
+            new PIDController(AutoConstants.kPXController, 0, 0),
+            new PIDController(AutoConstants.kPYController, 0, 0), 
+            thetaController,
+            m_drive::setModuleStates,
+            m_drive);
+
+        SwerveControllerCommand redAmp3NoteCommand3rdNoteBackward = new SwerveControllerCommand(
+            redAmp3NoteTrajectory3rdNoteBackward,
+            m_drive::getPose, 
+            DriveConstants.kDriveKinematics, 
+            new PIDController(AutoConstants.kPXController, 0, 0),
+            new PIDController(AutoConstants.kPYController, 0, 0), 
+            thetaController,
+            m_drive::setModuleStates,
+            m_drive);
+        
+        SwerveControllerCommand redAmp3NoteCommandGTFO = new SwerveControllerCommand(
+            redAmp3NoteTrajectoryGTFO,
+            m_drive::getPose, 
+            DriveConstants.kDriveKinematics, 
+            new PIDController(AutoConstants.kPXController, 0, 0),
+            new PIDController(AutoConstants.kPYController, 0, 0), 
+            thetaController,
+            m_drive::setModuleStates,
+            m_drive);
+        
+        m_drive.resetOdometry(redAmp3NoteTrajectoryForward.getInitialPose());
+
+        return new SequentialCommandGroup(
+            new ShootForward(m_shooter).withTimeout(1),
+            new WaitCommand(w),
+            new ParallelCommandGroup(
+                redAmp3NoteCommandForward,
+                new IntakeInwards(m_intake)
+            ),
+            new WaitCommand(w).andThen(() -> m_drive.resetOdometry(redAmp3NoteTrajectoryBackward.getInitialPose())),
+            redAmp3NoteCommandBackward,
+            new ShootForward(m_shooter).withTimeout(1),
+            new WaitCommand(w).andThen(() -> m_drive.resetOdometry(redAmp3NoteTrajectory3rdNoteForward.getInitialPose())),
+            new ParallelCommandGroup(
+                redAmp3NoteCommand3rdNoteForward,
+                new IntakeInwards(m_intake)
+            ),
+            new WaitCommand(w).andThen(() -> m_drive.resetOdometry(redAmp3NoteTrajectory3rdNoteBackward.getInitialPose())),
+            redAmp3NoteCommand3rdNoteBackward,
+            new WaitCommand(w),
+            new ShootForward(m_shooter).withTimeout(1),
+            new WaitCommand(w).andThen(() -> m_drive.resetOdometry(redAmp3NoteTrajectoryGTFO.getInitialPose())),
+            redAmp3NoteCommandGTFO.andThen(() -> m_drive.drive(0, 0, 0, false, false))
+        );
+
+    }
+
     // public Command redSourceSide2Note() {}
     // public Command redSourceSide3Note() {}
 
