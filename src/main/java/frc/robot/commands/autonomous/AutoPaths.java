@@ -118,7 +118,75 @@ public class AutoPaths extends Command {
     }  
 
     // public Command redAmpSide3Note() {}
-    // public Command redSourceSide2Note() {}
+
+    public Command redSourceSide2Note() {
+         Trajectory redSource2NoteTrajectoryForward = TrajectoryGenerator.generateTrajectory(
+            new Pose2d(0, 0, new Rotation2d(0)), 
+            List.of(new Translation2d(Units.inchesToMeters(44.2), Units.inchesToMeters(-6.85))),
+            new Pose2d(Units.inchesToMeters(88.4), Units.inchesToMeters(-13.7), new Rotation2d(Units.degreesToRadians(21.2))), config);
+
+        Trajectory redSource2NoteTrajectoryBackward = TrajectoryGenerator.generateTrajectory(
+            new Pose2d(Units.inchesToMeters(88.4), Units.inchesToMeters(-13.7), new Rotation2d(21.2)), 
+            List.of(new Translation2d(Units.inchesToMeters(44.2), Units.inchesToMeters(-6.85))),
+            new Pose2d(0, 0, new Rotation2d(0)), config);
+
+        Trajectory redSource2NoteTrajectoryGTFO = TrajectoryGenerator.generateTrajectory(
+            new Pose2d(0, 0, new Rotation2d(0)), 
+            List.of(new Translation2d(Units.inchesToMeters(147.4), Units.inchesToMeters(-103.2))),
+            new Pose2d(Units.inchesToMeters(297.4), Units.inchesToMeters(-103.2), new Rotation2d(Units.degreesToRadians(30))),
+            config);
+
+        var thetaController = new ProfiledPIDController(
+            AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+        SwerveControllerCommand redSource2NoteCommandForward = new SwerveControllerCommand(
+            redSource2NoteTrajectoryForward,
+            m_drive::getPose, 
+            DriveConstants.kDriveKinematics, 
+            new PIDController(AutoConstants.kPXController, 0, 0),
+            new PIDController(AutoConstants.kPYController, 0, 0), 
+            thetaController,
+            m_drive::setModuleStates,
+            m_drive);
+
+        SwerveControllerCommand redSource2NoteCommandBackward = new SwerveControllerCommand(
+            redSource2NoteTrajectoryBackward,
+            m_drive::getPose, 
+            DriveConstants.kDriveKinematics, 
+            new PIDController(AutoConstants.kPXController, 0, 0),
+            new PIDController(AutoConstants.kPYController, 0, 0), 
+            thetaController,
+            m_drive::setModuleStates,
+            m_drive);
+
+        SwerveControllerCommand redSource2NoteCommandGTFO = new SwerveControllerCommand(
+            redSource2NoteTrajectoryGTFO,
+            m_drive::getPose, 
+            DriveConstants.kDriveKinematics, 
+            new PIDController(AutoConstants.kPXController, 0, 0),
+            new PIDController(AutoConstants.kPYController, 0, 0), 
+            thetaController,
+            m_drive::setModuleStates,
+            m_drive);
+        
+        m_drive.resetOdometry(redSource2NoteTrajectoryForward.getInitialPose());
+
+        return new SequentialCommandGroup(
+            new ShootForward(m_shooter).withTimeout(1),
+            new WaitCommand(w),
+            new ParallelCommandGroup(
+                redSource2NoteCommandForward,
+                new IntakeInwards(m_intake)
+            ),
+            new WaitCommand(w).andThen(() -> m_drive.resetOdometry(redSource2NoteTrajectoryBackward.getInitialPose())),
+            redSource2NoteCommandBackward,
+            new ShootForward(m_shooter).withTimeout(1),
+            new WaitCommand(w).andThen(() -> m_drive.resetOdometry(redSource2NoteTrajectoryGTFO.getInitialPose())),
+            redSource2NoteCommandGTFO.andThen(() -> m_drive.drive(0, 0, 0, false, false))
+        );
+    }
+
     // public Command redSourceSide3Note() {}
 
     public Command redStageSide2Note() {
