@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -18,6 +19,7 @@ import edu.wpi.first.cameraserver.CameraServer;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  private final SendableChooser<String> startPosChooser = new SendableChooser<>();
 
   private RobotContainer m_robotContainer;
 
@@ -31,6 +33,19 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     CameraServer.startAutomaticCapture();
+
+    startPosChooser.addOption("Red Amp Side 2 Note", "ra2");
+    startPosChooser.addOption("Red Amp Side 3 Note", "ra3");
+    startPosChooser.addOption("Red Source Side 2 Note", "rso2");
+    startPosChooser.addOption("Red Source Side 3 Note", "rso3");
+    startPosChooser.addOption("Red Stage Side 2 Note", "rst2");
+    startPosChooser.addOption("Blue Amp Side 2 Note", "ba2");
+    startPosChooser.addOption("Blue Amp Side 3 Note", "ba3");
+    startPosChooser.addOption("Blue Source Side 2 Note", "bso2");
+    startPosChooser.addOption("Blue Source Side 3 Note", "bso3");
+    startPosChooser.addOption("Blue Stage Side 2 Note", "bst2");
+
+    m_robotContainer.m_robotDrive.resetEncoders();
 
   }
 
@@ -60,7 +75,10 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+
+    String startPos = startPosChooser.getSelected();
+
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand(startPos);
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
