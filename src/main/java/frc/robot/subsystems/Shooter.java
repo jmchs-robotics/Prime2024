@@ -7,14 +7,17 @@ import frc.robot.Constants.ShooterConstants;
 public class Shooter extends SubsystemBase {
 
     private final TalonFX rightShooterMotor;
-    // private final TalonFX leftShooterMotor;
+    private final TalonFX leftShooterMotor;
 
     public Shooter() {
 
         rightShooterMotor = new TalonFX(ShooterConstants.rightShooterID);
-        addChild("rightShooterTalon", rightShooterMotor);
-        rightShooterMotor.setInverted(true);
-        // leftShooterMotor = new TalonFX(ShooterConstants.leftShooterID);
+         addChild("rightShooterTalon", rightShooterMotor);
+         rightShooterMotor.setInverted(true);
+        
+        leftShooterMotor = new TalonFX(ShooterConstants.leftShooterID);
+         addChild("leftShooterTalon", leftShooterMotor);
+         leftShooterMotor.setInverted(false);
 
     }
 
@@ -30,6 +33,24 @@ public class Shooter extends SubsystemBase {
 
     public void stopRightShooterMotor() {
         rightShooterMotor.stopMotor();
+    }
+
+    public void setLeftShooterMotor(double speed) {
+        leftShooterMotor.set(speed);
+    }
+
+    public void stopLeftShooterMotor() {
+        leftShooterMotor.stopMotor();
+    }
+
+    public void setBothShooterMotors(double speed) {
+        setRightShooterMotor(speed);
+        setLeftShooterMotor(speed);
+    }
+
+    public void stopBothShooterMotors() {
+        stopRightShooterMotor();
+        stopLeftShooterMotor();
     }
     
 }
