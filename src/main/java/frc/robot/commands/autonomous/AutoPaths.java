@@ -47,6 +47,35 @@ public class AutoPaths extends Command {
         addRequirements(m_drive, m_shooter, m_intake, m_climber);
     }
 
+    public Command test() {
+
+        Trajectory test = TrajectoryGenerator.generateTrajectory(
+            new Pose2d(0, 0, new Rotation2d(0)),
+            List.of(new Translation2d(1, 1), new Translation2d(2, -1)), // coordinate positions
+            new Pose2d(3, 0, new Rotation2d(0)),
+            config);
+
+        var thetaController = new ProfiledPIDController(
+            AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+            test,
+            m_drive::getPose, // Functional interface to feed supplier
+            DriveConstants.kDriveKinematics,
+
+            new PIDController(AutoConstants.kPXController, 0, 0),
+            new PIDController(AutoConstants.kPYController, 0, 0),
+            thetaController,
+            m_drive::setModuleStates,
+            m_drive);
+
+        m_drive.resetOdometry(test.getInitialPose());
+
+        return swerveControllerCommand.andThen(() -> m_drive.drive(0, 0, 0, false, false));
+
+    }
+
     public Command redAmpSide2Note() {
 
         Trajectory redAmp2NoteTrajectoryForward = TrajectoryGenerator.generateTrajectory(

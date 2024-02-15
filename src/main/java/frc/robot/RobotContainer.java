@@ -20,6 +20,7 @@ import frc.robot.commands.*;
 import frc.robot.commands.autonomous.AutoPaths;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -44,6 +45,7 @@ public class RobotContainer {
 
   
   JoystickButton driveA = new JoystickButton(driveStick, XboxController.Button.kA.value);
+  JoystickButton driveStart = new JoystickButton(driveStick, XboxController.Button.kStart.value);
   JoystickButton subA = new JoystickButton(subStick, XboxController.Button.kA.value);
   JoystickButton subB = new JoystickButton(subStick, XboxController.Button.kB.value);
   JoystickButton subX = new JoystickButton(subStick, XboxController.Button.kX.value);
@@ -97,6 +99,10 @@ public class RobotContainer {
     driveA.whileTrue(
         new ShootForward(m_shooter)
     );
+
+    driveStart.onTrue(
+      new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive)
+    );
   }
 
   /**
@@ -111,6 +117,9 @@ public class RobotContainer {
     Command autoCommand = null;
 
     switch(a) {
+      case "test":
+        autoCommand = p.test();
+        break;
       case "ra2":
         autoCommand = p.redAmpSide2Note();
         break;

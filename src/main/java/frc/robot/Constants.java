@@ -123,8 +123,8 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 3;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+    public static final double kMaxSpeedMetersPerSecond = 1;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 1;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
@@ -141,6 +141,11 @@ public final class Constants {
     public static final double kFreeSpeedRpm = 5676;
   }
 
+  public static final class ShooterConstants {
+    public static final int rightShooterID = 1;
+    public static final int leftShooterID = 2;
+  }
+
   public static final class IntakeConstants {
     public static final int intakeID = 3;
     public static final int indexID = 4;
@@ -149,11 +154,6 @@ public final class Constants {
   public static final class ClimberConstants {
     public static final int rightClimberID = 5;
     public static final int leftClimberID = 6;
-  }
-
-  public static final class ShooterConstants {
-    public static final int rightShooterID = 1;
-    public static final int leftShooterID = 2;
   }
   
 }
