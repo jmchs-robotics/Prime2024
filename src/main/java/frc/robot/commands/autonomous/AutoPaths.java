@@ -1,6 +1,7 @@
 package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -50,9 +51,10 @@ public class AutoPaths extends Command {
     public Command test() {
 
         Trajectory test = TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0, 0, new Rotation2d(0)),
-            List.of(new Translation2d(1, 1), new Translation2d(2, -1)), // coordinate positions
-            new Pose2d(3, 0, new Rotation2d(0)),
+            List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
+                // new Pose2d(1, 0, Rotation2d.fromDegrees(0)),
+                // new Pose2d(2, 0, Rotation2d.fromDegrees(0)),
+                new Pose2d(3, 0, Rotation2d.fromDegrees(0))),
             config);
 
         var thetaController = new ProfiledPIDController(
