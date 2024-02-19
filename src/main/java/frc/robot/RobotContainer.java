@@ -46,6 +46,7 @@ public class RobotContainer {
   
   JoystickButton driveA = new JoystickButton(driveStick, XboxController.Button.kA.value);
   JoystickButton driveStart = new JoystickButton(driveStick, XboxController.Button.kStart.value);
+  JoystickButton driveLB = new JoystickButton(driveStick, XboxController.Button.kLeftBumper.value);
   JoystickButton subA = new JoystickButton(subStick, XboxController.Button.kA.value);
   JoystickButton subB = new JoystickButton(subStick, XboxController.Button.kB.value);
   JoystickButton subX = new JoystickButton(subStick, XboxController.Button.kX.value);
@@ -87,17 +88,13 @@ public class RobotContainer {
     subB.whileTrue(
       new IntakeOutwards(m_intake)
     );
-
-    subX.whileTrue(
-      new IndexInwards(m_intake)
-    );
-
-    subY.whileTrue(
-      new IndexOutwards(m_intake)
-    );
     
     driveA.whileTrue(
         new ShootForward(m_shooter)
+    );
+
+    driveLB.and(driveA).whileTrue(
+      new ShootForwardTurbo(m_shooter)
     );
 
     driveStart.onTrue(

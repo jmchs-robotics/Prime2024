@@ -26,8 +26,8 @@ public class DefaultClimberCommand extends Command {
     @Override
     public void execute() {
 
-        m_subsystem.spinLeftMotor(MathUtil.applyDeadband(m_stick.getLeftY(), OIConstants.kDriveDeadband));
-        m_subsystem.spinRightMotor(MathUtil.applyDeadband(m_stick.getRightY(), OIConstants.kDriveDeadband));
+        m_subsystem.spinLeftMotor(MathUtil.applyDeadband(m_stick.getLeftY() * 0.75, OIConstants.kDriveDeadband));
+        m_subsystem.spinRightMotor(MathUtil.applyDeadband(m_stick.getRightY() * 0.75, OIConstants.kDriveDeadband));
 
     }
 

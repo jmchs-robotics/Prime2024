@@ -1,18 +1,26 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
 
-    private final TalonFX intakeMotor;
-    private final TalonFX indexMotor;
+    private final TalonFX rightIntakeMotor;
+    private final TalonFX leftIntakeMotor;
 
     public Intake() {
 
-        intakeMotor = new TalonFX(IntakeConstants.intakeID);
-        indexMotor = new TalonFX(IntakeConstants.indexID);
+        rightIntakeMotor = new TalonFX(IntakeConstants.rightIntakeID);
+        leftIntakeMotor = new TalonFX(IntakeConstants.leftIntakeID);
+
+        rightIntakeMotor.setNeutralMode(NeutralModeValue.Brake);
+        leftIntakeMotor.setNeutralMode(NeutralModeValue.Brake);
+
+        rightIntakeMotor.setInverted(false);
+        leftIntakeMotor.setInverted(false);
 
     }
 
@@ -22,30 +30,14 @@ public class Intake extends SubsystemBase {
     @Override
     public void simulationPeriodic() {}
 
-    public void intakePiece(double speed) {
-        intakeMotor.set(speed);
+    public void setIntake(double speed) {
+        rightIntakeMotor.set(speed);
+        leftIntakeMotor.set(speed);
     }
 
-    public void stopIntakeMotor() {
-        intakeMotor.stopMotor();
-    }
-    
-    public void indexPiece(double speed) {
-        indexMotor.set(speed);
-    }
-
-    public void stopIndexMotor() {
-        indexMotor.stopMotor();
-    }
-
-    public void spinBothMotors(double speed) {
-        intakePiece(speed);
-        indexPiece(speed);
-    }
-
-    public void stopBothMotors() {
-        stopIntakeMotor();
-        stopIndexMotor();
+    public void stopIntake() {
+       rightIntakeMotor.stopMotor();
+       leftIntakeMotor.stopMotor();
     }
     
 }

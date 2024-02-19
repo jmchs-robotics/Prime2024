@@ -3,11 +3,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
-public class ShootForward extends Command {
+public class ShootForwardTurbo extends Command {
 
     private Shooter m_subsystem;
 
-    public ShootForward(Shooter subsystem) {
+    public ShootForwardTurbo(Shooter subsystem) {
 
         m_subsystem = subsystem;
         addRequirements(m_subsystem);
@@ -19,7 +19,7 @@ public class ShootForward extends Command {
 
     @Override
     public void execute() {
-        m_subsystem.setBothShooterMotors(0.3);
+        m_subsystem.setBothShooterMotors(0.5);
     }
 
     @Override

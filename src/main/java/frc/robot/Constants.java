@@ -119,7 +119,7 @@ public final class Constants {
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
-    public static final double kDriveDeadband = 0.1;
+    public static final double kDriveDeadband = 0.15;
   }
 
   public static final class AutoConstants {
@@ -147,8 +147,8 @@ public final class Constants {
   }
 
   public static final class IntakeConstants {
-    public static final int intakeID = 3;
-    public static final int indexID = 4;
+    public static final int rightIntakeID = 3;
+    public static final int leftIntakeID = 4;
   }
 
   public static final class ClimberConstants {

@@ -22,6 +22,7 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.commands.autonomous.*;
 
 import java.util.List;
 import edu.wpi.first.math.util.Units;
@@ -50,11 +51,10 @@ public class AutoPaths extends Command {
 
     public Command test() {
 
-        Trajectory test = TrajectoryGenerator.generateTrajectory(
-            List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)), 
-                // new Pose2d(1, 0, Rotation2d.fromDegrees(0)),
-                // new Pose2d(2, 0, Rotation2d.fromDegrees(0)),
-                new Pose2d(3, 0, Rotation2d.fromDegrees(0))),
+        /* Trajectory test = TrajectoryGenerator.generateTrajectory(
+            new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+            List.of(new Translation2d(1, 0), new Translation2d(2, 0)),
+            new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
             config);
 
         var thetaController = new ProfiledPIDController(
@@ -74,7 +74,12 @@ public class AutoPaths extends Command {
 
         m_drive.resetOdometry(test.getInitialPose());
 
-        return swerveControllerCommand.andThen(() -> m_drive.drive(0, 0, 0, false, false));
+        return swerveControllerCommand.andThen(() -> m_drive.drive(0, 0, 0, false, false)); */
+        return new SequentialCommandGroup(
+            new InstantCommand(m_drive::setDrivePIDToSlow, m_drive),
+            new WaitCommand(w),
+            new DriveForDist(m_drive, 36)
+        );
 
     }
 

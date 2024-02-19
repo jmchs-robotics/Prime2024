@@ -19,7 +19,7 @@ public class DefaultIntakeCommand extends Command {
 
     @Override
     public void execute() {
-        m_subsystem.stopBothMotors();
+        m_subsystem.stopIntake();
     }
 
     @Override
