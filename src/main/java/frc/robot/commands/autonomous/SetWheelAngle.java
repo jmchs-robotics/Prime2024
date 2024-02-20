@@ -1,5 +1,7 @@
 package frc.robot.commands.autonomous;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -20,19 +22,22 @@ public class SetWheelAngle extends Command {
 
     @Override
     public void initialize() {   
-        for (int i = 0; i < 4; i++) {
-            drivetrain.getSwerveModule(i).setTargetAngle(angleWant);
-        }
+        SwerveModuleState[] wheelStates = {
+            new SwerveModuleState(0, Rotation2d.fromDegrees(angleWant)),
+            new SwerveModuleState(0, Rotation2d.fromDegrees(angleWant)),
+            new SwerveModuleState(0, Rotation2d.fromDegrees(angleWant)),
+            new SwerveModuleState(0, Rotation2d.fromDegrees(angleWant))
+        };
+
+        drivetrain.setModuleStates(wheelStates);
     }
 
     @Override
     public boolean isFinished() {
-
         return true;
     }
 
     @Override
-    public void end( boolean interrupted) {
+    public void end( boolean interrupted) {}
 
-    }
 }
