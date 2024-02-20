@@ -10,17 +10,21 @@ public class Intake extends SubsystemBase {
 
     private final TalonFX rightIntakeMotor;
     private final TalonFX leftIntakeMotor;
+    private final TalonFX indexMotor;
 
     public Intake() {
 
         rightIntakeMotor = new TalonFX(IntakeConstants.rightIntakeID);
         leftIntakeMotor = new TalonFX(IntakeConstants.leftIntakeID);
+        indexMotor = new TalonFX(IntakeConstants.indexID);
 
         rightIntakeMotor.setNeutralMode(NeutralModeValue.Brake);
         leftIntakeMotor.setNeutralMode(NeutralModeValue.Brake);
+        indexMotor.setNeutralMode(NeutralModeValue.Brake);
 
         rightIntakeMotor.setInverted(false);
         leftIntakeMotor.setInverted(false);
+        indexMotor.setInverted(false);
 
     }
 
@@ -33,11 +37,13 @@ public class Intake extends SubsystemBase {
     public void setIntake(double speed) {
         rightIntakeMotor.set(speed);
         leftIntakeMotor.set(speed);
+        indexMotor.set(speed);
     }
 
     public void stopIntake() {
        rightIntakeMotor.stopMotor();
        leftIntakeMotor.stopMotor();
+       indexMotor.stopMotor();
     }
     
 }
