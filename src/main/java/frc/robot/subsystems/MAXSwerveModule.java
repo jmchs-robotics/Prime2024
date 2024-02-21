@@ -139,6 +139,10 @@ public class MAXSwerveModule {
         new Rotation2d(m_turningEncoder.getPosition() - m_chassisAngularOffset));
   }
 
+  public double getPositionTicks() {
+    return m_drivingEncoder.getPosition();
+  }
+
   /**
    * Sets the desired state for the module.
    *
@@ -247,5 +251,5 @@ public class MAXSwerveModule {
 
   public void setDrivePIDOutputRange(double min, double max) {
     m_drivingPIDController.setOutputRange(min, max);
-}
+  }
 }

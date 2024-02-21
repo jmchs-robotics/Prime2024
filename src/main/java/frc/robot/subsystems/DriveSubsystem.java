@@ -215,6 +215,23 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearRight.setDesiredState(desiredStates[3]);
   }
 
+  /**
+   * Sets the swerve ModuleStates.
+   * 
+   * @param speed Desired speed of module in meters per second
+   * @param angle Desired angle of module in degrees (CCW Positive)
+   */
+  public void setModuleStates(double speed, double angle) {
+    SwerveModuleState[] wheelStates = {
+      new SwerveModuleState(speed, Rotation2d.fromDegrees(angle)),
+      new SwerveModuleState(speed, Rotation2d.fromDegrees(angle)),
+      new SwerveModuleState(speed, Rotation2d.fromDegrees(angle)),
+      new SwerveModuleState(speed, Rotation2d.fromDegrees(angle))
+    };
+
+    setModuleStates(wheelStates);
+  }
+
   /** Resets the drive encoders to currently read a position of 0. */
   public void resetEncoders() {
     m_frontLeft.resetEncoders();
