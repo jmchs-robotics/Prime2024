@@ -4,27 +4,14 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.*;
 import frc.robot.commands.*;
 import frc.robot.commands.autonomous.AutoPaths;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import java.util.List;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -51,6 +38,7 @@ public class RobotContainer {
   JoystickButton subB = new JoystickButton(subStick, XboxController.Button.kB.value);
   JoystickButton subX = new JoystickButton(subStick, XboxController.Button.kX.value);
   JoystickButton subY = new JoystickButton(subStick, XboxController.Button.kY.value);
+  JoystickButton subLB = new JoystickButton(subStick, XboxController.Button.kLeftBumper.value);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -89,12 +77,16 @@ public class RobotContainer {
       new IntakeOutwards(m_intake)
     );
     
-    driveA.whileTrue(
-        new ShootForward(m_shooter)
+    subX.whileTrue(
+        new ShootForSpeaker(m_shooter)
     );
 
-    driveLB.and(driveA).whileTrue(
-      new ShootForwardTurbo(m_shooter)
+    subLB.and(subX).whileTrue(
+      new ShootForAmp(m_shooter)
+    );
+
+    subY.whileTrue(
+      new ReverseShooter(m_shooter)
     );
 
     driveStart.onTrue(
@@ -117,36 +109,20 @@ public class RobotContainer {
       case "test":
         autoCommand = p.test();
         break;
-      case "ra2":
-        autoCommand = p.redAmpSide2Note();
+      case "c2":
+        autoCommand = p.center2NoteBase();
         break;
-      case "ra3":
-        autoCommand = p.redAmpSide3Note();
+      case "ra3bs3":
+        autoCommand = p.red3NoteAmp_blue3NoteSource();
         break;
-      case "rso2":
-        autoCommand = p.redSourceSide2Note();
+      case "rs3ba3":
+        autoCommand = p.red3NoteSource_blue3NoteAmp();
         break;
-      case "rso3":
-        autoCommand = p.redSourceSide3Note();
+      case "ra2bs2":
+        autoCommand = p.red2NoteAmp_blue2NoteSource();
         break;
-      case "rst2":
-        autoCommand = p.redStageSide2Note();
-        break;
-      case "ba2":
-        autoCommand = p.blueAmpSide2Note();
-        break;
-      case "ba3":
-        autoCommand = p.blueAmpSide3Note();
-        break;
-      case "bso2":
-        autoCommand = p.blueSourceSide2Note();
-        break;
-      case "bso3":
-        autoCommand = p.blueSourceSide3Note();
-        break;
-      case "bst2":
-        autoCommand = p.blueStageSide2Note();
-        break;      
+      case "rs2ba2":
+        autoCommand = p.red2NoteSource_blue2NoteAmp();
     }
 
     return autoCommand;

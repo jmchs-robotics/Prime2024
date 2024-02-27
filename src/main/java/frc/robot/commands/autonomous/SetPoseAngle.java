@@ -1,6 +1,7 @@
 package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -18,6 +19,7 @@ public class SetPoseAngle extends Command {
 
     private final DriveSubsystem drivetrain;
     private final double targetAngle;
+    private final boolean turnRight; // true is right, false is left
     // private final PIDController angleController;
     // private final Timer finishTimer = new Timer();
     // private boolean isTimerStarted = false;
@@ -27,7 +29,7 @@ public class SetPoseAngle extends Command {
      * turn the robot to the targetAngle
      Field oriented.
      * @param drivetrain (DriveSubsystem)
-     * @param targetAngle angle to turn to, in degrees (double) Positive is CCW, negative is CW.
+     * @param targetAngle angle to turn to, in degrees (double) in range (-180, 180] CW positive
      */
     public SetPoseAngle(DriveSubsystem drivetrain, double targetAngle) {
 //         this.drivetrain = drivetrain;
@@ -72,6 +74,20 @@ public class SetPoseAngle extends Command {
 
         this.drivetrain = drivetrain;
         this.targetAngle = targetAngle;
+
+        double angleDifference = targetAngle - drivetrain.getHeading();
+
+        if (angleDifference < -180) {
+            angleDifference += 360;
+        } else if (angleDifference > 180) {
+            angleDifference -= 360;
+        }
+
+        if (angleDifference < 0) {
+            turnRight = false;
+        } else {
+            turnRight = true;
+        }
     }
 
     @Override
@@ -98,6 +114,15 @@ public class SetPoseAngle extends Command {
 
         //angleController.enable();
 
+        SwerveModuleState[] turningWheelStates = new SwerveModuleState[4];
+
+        turningWheelStates[0] = new SwerveModuleState(0, Rotation2d.fromDegrees(45));
+        turningWheelStates[1] = new SwerveModuleState(0, Rotation2d.fromDegrees(-45));
+        turningWheelStates[2] = new SwerveModuleState(0, Rotation2d.fromDegrees(-45));
+        turningWheelStates[3] = new SwerveModuleState(0, Rotation2d.fromDegrees(45));
+
+        drivetrain.setModuleStates(turningWheelStates);
+
     }
 
     @Override
@@ -106,15 +131,23 @@ public class SetPoseAngle extends Command {
         // for (int i = 0; i < 4; i++)
         //     drivetrain.getSwerveModule(i).setTargetSpeed(output);
 
-        // Remember CCW positive
-        SwerveModuleState[] turningWheelStates = {
-            new SwerveModuleState(1, Rotation2d.fromDegrees(-45)),
-            new SwerveModuleState(1, Rotation2d.fromDegrees(45)),
-            new SwerveModuleState(1, Rotation2d.fromDegrees(45)),
-            new SwerveModuleState(1, Rotation2d.fromDegrees(-45))
-        };
+        // Remember CW positive (in this case)
 
-        drivetrain.setModuleStates(turningWheelStates);
+        // SwerveModuleState[] turningWheelStates = new SwerveModuleState[4];
+
+        // if (turnRight) {
+        //     turningWheelStates[0] = new SwerveModuleState(-1, Rotation2d.fromDegrees(45));
+        //     turningWheelStates[1] = new SwerveModuleState(1, Rotation2d.fromDegrees(-45));
+        //     turningWheelStates[2] = new SwerveModuleState(1, Rotation2d.fromDegrees(-45));
+        //     turningWheelStates[3] = new SwerveModuleState(-1, Rotation2d.fromDegrees(45));
+        // } else {
+        //     turningWheelStates[0] = new SwerveModuleState(1, Rotation2d.fromDegrees(-45));
+        //     turningWheelStates[1] = new SwerveModuleState(-1, Rotation2d.fromDegrees(45));
+        //     turningWheelStates[2] = new SwerveModuleState(-1, Rotation2d.fromDegrees(45));
+        //     turningWheelStates[3] = new SwerveModuleState(1, Rotation2d.fromDegrees(-45));
+        // }
+
+        // drivetrain.setModuleStates(turningWheelStates);
     }
 
     @Override
@@ -122,10 +155,38 @@ public class SetPoseAngle extends Command {
         double currentAngle = drivetrain.getHeading();
         double currentError = currentAngle - targetAngle;
 
-        if (currentError <= 0) {
-            return true;
+        if (turnRight) {
+            if (targetAngle < 0) {
+                if (currentAngle > 0) {
+                    return false;
+                } else if (currentAngle >= targetAngle) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                if (currentAngle >= targetAngle) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
         } else {
-            return false;
+            if (targetAngle > 0) {
+                if (currentAngle < 0) {
+                    return false;
+                } else if (currentAngle <= targetAngle) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                if (currentAngle <= targetAngle) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
         }
 
         // boolean inTargetBuffer = Math.abs(currentError) < TARGET_ANGLE_BUFFER
@@ -147,10 +208,11 @@ public class SetPoseAngle extends Command {
 
     @Override
     public void end( boolean isInterrupted) {
+        SmartDashboard.putString("HAHA", "It dont work");
         // angleController.disable();
 
         // shouldn't need to do any fancy setModuleState stuff
         // because zero drive automatically sets it to 0
-        drivetrain.drive(0, 0, 0, false, false);
+        // drivetrain.drive(0, 0, 0, false, false);
     }
 }

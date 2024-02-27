@@ -36,16 +36,11 @@ public class Robot extends TimedRobot {
     // CameraServer.startAutomaticCapture();
 
     startPosChooser.setDefaultOption("Test Autonomous", "test");
-    startPosChooser.addOption("Red Amp Side 2 Note", "ra2");
-    startPosChooser.addOption("Red Amp Side 3 Note", "ra3");
-    startPosChooser.addOption("Red Source Side 2 Note", "rso2");
-    startPosChooser.addOption("Red Source Side 3 Note", "rso3");
-    startPosChooser.addOption("Red Stage Side 2 Note", "rst2");
-    startPosChooser.addOption("Blue Amp Side 2 Note", "ba2");
-    startPosChooser.addOption("Blue Amp Side 3 Note", "ba3");
-    startPosChooser.addOption("Blue Source Side 2 Note", "bso2");
-    startPosChooser.addOption("Blue Source Side 3 Note", "bso3");
-    startPosChooser.addOption("Blue Stage Side 2 Note", "bst2");
+    startPosChooser.addOption("Center 2 Note", "c2");
+    startPosChooser.addOption("Red 3 Note Amp / Blue 3 Note Source", "ra3bs3");
+    startPosChooser.addOption("Red 3 Note Source / Blue 3 Note Amp", "rs3ba3");
+    startPosChooser.addOption("Red 2 Note Amp / Blue 2 Note Source", "ra2bs2");
+    startPosChooser.addOption("Red 2 Note Source / Blue 2 Note Amp", "rs2ba2");
 
     m_robotContainer.m_robotDrive.resetEncoders();
 

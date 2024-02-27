@@ -128,13 +128,19 @@ public final class Constants {
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-    public static final double kPXController = 1;
-    public static final double kPYController = 1;
-    public static final double kPThetaController = 1;
+    public static final double kPXController = 0.01;
+    public static final double kPYController = 0.01;
+    public static final double kPThetaController = 0.005;
 
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+
+    // These units are in inches
+    // Some of them are negative because the robot goes backwards
+    public static final double robotToCenterNote = -60.125;
+    public static final double distBetweenNotes = 57.0;
+    public static final double dist3NoteAngled = -33;
   }
 
   public static final class NeoMotorConstants {

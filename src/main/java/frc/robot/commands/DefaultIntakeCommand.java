@@ -20,6 +20,7 @@ public class DefaultIntakeCommand extends Command {
     @Override
     public void execute() {
         m_subsystem.stopIntake();
+        m_subsystem.stopIndex();
     }
 
     @Override

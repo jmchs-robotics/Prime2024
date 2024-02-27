@@ -20,6 +20,7 @@ public class IntakeOutwards extends Command {
     @Override
     public void execute () {
         m_subsystem.setIntake(-0.2);
+        m_subsystem.setIndex(-0.4);
     }
 
     @Override
@@ -30,6 +31,7 @@ public class IntakeOutwards extends Command {
     @Override
     public void end (boolean interrupted) {
         m_subsystem.stopIntake();
+        m_subsystem.stopIndex();
     }
     
 }

@@ -37,13 +37,19 @@ public class Intake extends SubsystemBase {
     public void setIntake(double speed) {
         rightIntakeMotor.set(speed);
         leftIntakeMotor.set(speed);
-        indexMotor.set(speed);
     }
 
     public void stopIntake() {
        rightIntakeMotor.stopMotor();
        leftIntakeMotor.stopMotor();
-       indexMotor.stopMotor();
+    }
+
+    public void setIndex(double speed) {
+        indexMotor.set(speed);
+    }
+
+    public void stopIndex() {
+        indexMotor.stopMotor();
     }
     
 }
