@@ -19,7 +19,7 @@ public class ReverseShooter extends Command {
 
     @Override
     public void execute() {
-        m_subsystem.setBothShooterMotors(-0.4);
+        m_subsystem.setBothShooterMotors(-0.2);
     }
 
     @Override

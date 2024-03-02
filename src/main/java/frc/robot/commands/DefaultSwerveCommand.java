@@ -28,11 +28,11 @@ public class DefaultSwerveCommand extends Command {
     public void execute() {
 
         m_subsystem.drive(
-            -MathUtil.applyDeadband(m_stick.getLeftY() * 0.75, OIConstants.kDriveDeadband), 
-            -MathUtil.applyDeadband(m_stick.getLeftX() * 0.75, OIConstants.kDriveDeadband), 
-            -MathUtil.applyDeadband(m_stick.getRightX() * 0.75, OIConstants.kDriveDeadband),
+            -MathUtil.applyDeadband(m_stick.getLeftY() * 0.7, OIConstants.kDriveDeadband), 
+            -MathUtil.applyDeadband(m_stick.getLeftX() * 0.7, OIConstants.kDriveDeadband), 
+            -MathUtil.applyDeadband(m_stick.getRightX() * 0.7, OIConstants.kDriveDeadband),
             true,
-            true
+            false
         );
 
         SmartDashboard.putNumber("Robot Pose Angle", m_subsystem.getHeading());

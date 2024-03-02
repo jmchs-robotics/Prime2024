@@ -33,14 +33,15 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    // CameraServer.startAutomaticCapture();
+    CameraServer.startAutomaticCapture();
 
-    startPosChooser.setDefaultOption("Test Autonomous", "test");
-    startPosChooser.addOption("Center 2 Note", "c2");
+    startPosChooser.setDefaultOption("Center 2 Note", "c2");
     startPosChooser.addOption("Red 3 Note Amp / Blue 3 Note Source", "ra3bs3");
     startPosChooser.addOption("Red 3 Note Source / Blue 3 Note Amp", "rs3ba3");
     startPosChooser.addOption("Red 2 Note Amp / Blue 2 Note Source", "ra2bs2");
     startPosChooser.addOption("Red 2 Note Source / Blue 2 Note Amp", "rs2ba2");
+    startPosChooser.addOption("Top Side Auto (Path Planner)", "topSide");
+    startPosChooser.addOption("Bottom Side Auto (Path Planner)", "bottomSide");
 
     m_robotContainer.m_robotDrive.resetEncoders();
 

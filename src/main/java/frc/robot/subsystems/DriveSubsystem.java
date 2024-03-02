@@ -7,19 +7,25 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.WPIUtilJNI;
 // import edu.wpi.first.wpilibj.ADIS16470_IMU;
 // import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.pathplanner.lib.auto.AutoBuilder;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
@@ -44,6 +50,18 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kBackRightChassisAngularOffset);
 
   private final MAXSwerveModule[] mSwerveModules = {m_frontLeft, m_frontRight, m_rearLeft, m_rearRight};
+
+  private final Translation2d m_frontLeftLocation = new Translation2d(Units.inchesToMeters(12.75), Units.inchesToMeters(12.75));
+  private final Translation2d m_frontRightLocation = new Translation2d(Units.inchesToMeters(12.75), Units.inchesToMeters(-12.75));
+  private final Translation2d m_backLeftLocation = new Translation2d(Units.inchesToMeters(-12.75), Units.inchesToMeters(12.75));
+  private final Translation2d m_backRightLocation = new Translation2d(Units.inchesToMeters(-12.75), Units.inchesToMeters(-12.75));
+
+  private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
+    m_frontLeftLocation,
+    m_frontRightLocation,
+    m_backLeftLocation,
+    m_backRightLocation
+  );
 
   // The gyro sensor
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP, (byte) 200);
@@ -70,6 +88,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+    configPathPlanner();
   }
 
   @Override
@@ -274,6 +293,30 @@ public class DriveSubsystem extends SubsystemBase {
     return mSwerveModules[i];
   }
 
+  public ChassisSpeeds getChassisSpeeds() {
+    return m_kinematics.toChassisSpeeds(
+      m_frontLeft.getState(),
+      m_frontRight.getState(),
+      m_rearLeft.getState(),
+      m_rearRight.getState()
+    );
+  }
+
+  public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
+    ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
+
+    SwerveModuleState[] targetStates = m_kinematics.toSwerveModuleStates(targetSpeeds);
+    setStates(targetStates);
+  }
+
+  public void setStates(SwerveModuleState[] targetStates) {
+    SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, DriveConstants.kMaxSpeedMetersPerSecond);
+
+    for (int i = 0; i < mSwerveModules.length; i++) {
+      mSwerveModules[i].setDesiredState(targetStates[i]);
+    }
+  }
+
   public double[] calculateSwerveModuleAngles(double forward, double strafe, double rotation) {
     if (isFieldOriented()) {
         double angleRad = Math.toRadians(getHeading());
@@ -316,5 +359,23 @@ public class DriveSubsystem extends SubsystemBase {
   public void setDrivePIDToFast() {
     double x = 1;
     setDrivePIDOutputRange(-1 * x, x);
+  }
+
+  public void configPathPlanner() {
+
+    AutoBuilder.configureHolonomic(
+      this::getPose, 
+      this::resetOdometry, 
+      this::getChassisSpeeds, 
+      this::driveRobotRelative, 
+      DriveConstants.pathConfig, 
+      () -> {
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+          return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
+      }, 
+      this);
   }
 }

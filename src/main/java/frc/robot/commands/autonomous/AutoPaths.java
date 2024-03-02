@@ -20,6 +20,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.IntakeInwards;
 import frc.robot.commands.IntakeOutwards;
 import frc.robot.commands.ShootForSpeaker;
+import frc.robot.commands.ShootForwardTurbo;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
@@ -54,18 +55,27 @@ public class AutoPaths extends Command {
         addRequirements(m_drive, m_shooter, m_intake, m_climber);
     }
 
-    public Command test() {
+    public Command center2NoteBase() {
 
-        Trajectory test = TrajectoryGenerator.generateTrajectory(
+        Trajectory goOut1 = TrajectoryGenerator.generateTrajectory(
             List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-                new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
-                new Pose2d(6, 0.5, Rotation2d.fromDegrees(0))),            
+                new Pose2d(Units.inchesToMeters(-10), 0, Rotation2d.fromDegrees(0))),
+            config);
+
+        Trajectory goOut2 = TrajectoryGenerator.generateTrajectory(
+            List.of(new Pose2d(Units.inchesToMeters(-10), 0, Rotation2d.fromDegrees(0)),
+                new Pose2d(Units.inchesToMeters(-60.125), 0, Rotation2d.fromDegrees(0))),
+            config);
+
+        Trajectory goBackIn = TrajectoryGenerator.generateTrajectory(
+            List.of(new Pose2d(Units.inchesToMeters(-60.125), 0, Rotation2d.fromDegrees(0)),
+                new Pose2d(0, Units.inchesToMeters(-10), Rotation2d.fromDegrees(0))), 
             config);
 
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-            test,
+        SwerveControllerCommand goOut1Command = new SwerveControllerCommand(
+            goOut1,
             m_drive::getPose, // Functional interface to feed supplier
             DriveConstants.kDriveKinematics,
 
@@ -75,47 +85,8 @@ public class AutoPaths extends Command {
             m_drive::setModuleStates,
             m_drive);
 
-        m_drive.resetOdometry(test.getInitialPose());
-
-        // return swerveControllerCommand.andThen(() -> m_drive.drive(0, 0, 0, false, false));
-        return new SetPoseAngle(m_drive, 90)
-            .andThen(new IntakeInwards(m_intake)).withTimeout(1);
-
-        // return new SequentialCommandGroup(
-        //     new InstantCommand(m_drive::setDrivePIDToSlow, m_drive),
-        //     new WaitCommand(w),
-        //     new DriveForDist(m_drive, 36)
-        // );
-
-        // return new SequentialCommandGroup(
-        //     new DriveForDistRewrite(36, 0, m_drive),
-        //     new WaitCommand(w),
-        //     new DriveForDistRewrite(0, 36, m_drive),
-        //     new WaitCommand(w),
-        //     new DriveForDistRewrite(-36, 0, m_drive),
-        //     new WaitCommand(w),
-        //     new DriveForDistRewrite(0, -36, m_drive),
-        //     new WaitCommand(w)
-        // );
-
-    }
-
-    public Command center2NoteBase() {
-
-        Trajectory goOut = TrajectoryGenerator.generateTrajectory(
-            List.of(new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-                new Pose2d(Units.inchesToMeters(AutoConstants.robotToCenterNote), 0, Rotation2d.fromDegrees(0))),
-            config);
-
-        Trajectory goBackIn = TrajectoryGenerator.generateTrajectory(
-            List.of(new Pose2d(Units.inchesToMeters(AutoConstants.robotToCenterNote), 0, Rotation2d.fromDegrees(0)),
-                new Pose2d(0, 0, Rotation2d.fromDegrees(0))), 
-            config);
-
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-        SwerveControllerCommand goOutCommand = new SwerveControllerCommand(
-            goOut,
+        SwerveControllerCommand goOut2Command = new SwerveControllerCommand(
+            goOut2,
             m_drive::getPose, // Functional interface to feed supplier
             DriveConstants.kDriveKinematics,
 
@@ -136,17 +107,18 @@ public class AutoPaths extends Command {
             m_drive::setModuleStates,
             m_drive);
 
-        m_drive.resetOdometry(goOut.getInitialPose());
+        m_drive.resetOdometry(goOut1.getInitialPose());
 
         return new SequentialCommandGroup(
-            new ShootForSpeaker(m_shooter).withTimeout(0.5),
+            goOut1Command,
+            new ShootForSpeaker(m_shooter).withTimeout(0.5).andThen(() -> m_drive.resetOdometry(goOut2.getInitialPose())),
             new ParallelCommandGroup(
                 new IntakeInwards(m_intake).withTimeout(1),
                 new ShootForSpeaker(m_shooter).withTimeout(1)
             ),
             new WaitCommand(w),
             new ParallelRaceGroup(
-                goOutCommand,
+                goOut2Command,
                 new IntakeInwards(m_intake)
             ).andThen(() -> m_drive.resetOdometry(goBackIn.getInitialPose())),
             new WaitCommand(w),
@@ -313,10 +285,10 @@ public class AutoPaths extends Command {
         m_drive.resetOdometry(goOut.getInitialPose());
 
         return new SequentialCommandGroup(
-            new ShootForSpeaker(m_shooter).withTimeout(0.5),
+            new ShootForwardTurbo(m_shooter).withTimeout(0.5),
             new ParallelCommandGroup(
                 new IntakeInwards(m_intake).withTimeout(1),
-                new ShootForSpeaker(m_shooter).withTimeout(1)
+                new ShootForwardTurbo(m_shooter).withTimeout(1)
             ),
             new WaitCommand(w),
             new ParallelRaceGroup(
@@ -326,10 +298,10 @@ public class AutoPaths extends Command {
             new WaitCommand(w),
             goBackInCommand,           
             new WaitCommand(w),
-            new ShootForSpeaker(m_shooter).withTimeout(0.5),
+            new ShootForwardTurbo(m_shooter).withTimeout(0.5),
             new ParallelCommandGroup(
                 new IntakeInwards(m_intake).withTimeout(1),
-                new ShootForSpeaker(m_shooter).withTimeout(1)
+                new ShootForwardTurbo(m_shooter).withTimeout(1)
             )
         );
     }
@@ -375,10 +347,10 @@ public class AutoPaths extends Command {
         m_drive.resetOdometry(goOut.getInitialPose());
 
         return new SequentialCommandGroup(
-            new ShootForSpeaker(m_shooter).withTimeout(0.5),
+            new ShootForwardTurbo(m_shooter).withTimeout(0.5),
             new ParallelCommandGroup(
                 new IntakeInwards(m_intake).withTimeout(1),
-                new ShootForSpeaker(m_shooter).withTimeout(1)
+                new ShootForwardTurbo(m_shooter).withTimeout(1)
             ),
             new WaitCommand(w),
             new ParallelRaceGroup(
@@ -388,10 +360,10 @@ public class AutoPaths extends Command {
             new WaitCommand(w),
             goBackInCommand,           
             new WaitCommand(w),
-            new ShootForSpeaker(m_shooter).withTimeout(0.5),
+            new ShootForwardTurbo(m_shooter).withTimeout(0.5),
             new ParallelCommandGroup(
                 new IntakeInwards(m_intake).withTimeout(1),
-                new ShootForSpeaker(m_shooter).withTimeout(1)
+                new ShootForwardTurbo(m_shooter).withTimeout(1)
             )
         );
     }

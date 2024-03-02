@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.*;
 import frc.robot.commands.*;
@@ -12,6 +15,7 @@ import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -39,6 +43,7 @@ public class RobotContainer {
   JoystickButton subX = new JoystickButton(subStick, XboxController.Button.kX.value);
   JoystickButton subY = new JoystickButton(subStick, XboxController.Button.kY.value);
   JoystickButton subLB = new JoystickButton(subStick, XboxController.Button.kLeftBumper.value);
+  JoystickButton subRB = new JoystickButton(subStick, XboxController.Button.kRightBumper.value);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -52,6 +57,9 @@ public class RobotContainer {
     m_climber.setDefaultCommand(new DefaultClimberCommand(m_climber, subStick));
     m_intake.setDefaultCommand(new DefaultIntakeCommand(m_intake));
     m_shooter.setDefaultCommand(new DefaultShooterCommand(m_shooter));
+
+    NamedCommands.registerCommand("Intake Note", new IntakeInwards(m_intake));
+    NamedCommands.registerCommand("Shoot Note", new ShootForwardTurbo(m_shooter));
   }
 
   /**
@@ -78,10 +86,10 @@ public class RobotContainer {
     );
     
     subX.whileTrue(
-        new ShootForSpeaker(m_shooter)
+        new ShootForwardTurbo(m_shooter)
     );
 
-    subLB.and(subX).whileTrue(
+    subRB.and(subX).whileTrue(
       new ShootForAmp(m_shooter)
     );
 
@@ -106,9 +114,6 @@ public class RobotContainer {
     Command autoCommand = null;
 
     switch(a) {
-      case "test":
-        autoCommand = p.test();
-        break;
       case "c2":
         autoCommand = p.center2NoteBase();
         break;
@@ -123,6 +128,13 @@ public class RobotContainer {
         break;
       case "rs2ba2":
         autoCommand = p.red2NoteSource_blue2NoteAmp();
+        break;
+      case "topSide":
+        autoCommand = new PathPlannerAuto("TopSideAuto");
+        break;
+      case "bottomSide":
+        autoCommand = new PathPlannerAuto("BottomSideAuto");
+        break;
     }
 
     return autoCommand;

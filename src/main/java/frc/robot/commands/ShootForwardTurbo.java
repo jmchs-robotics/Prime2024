@@ -19,7 +19,7 @@ public class ShootForwardTurbo extends Command {
 
     @Override
     public void execute() {
-        m_subsystem.setBothShooterMotors(0.5);
+        m_subsystem.setBothShooterMotors(0.9);
     }
 
     @Override

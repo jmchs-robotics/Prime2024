@@ -19,7 +19,7 @@ public class ShootForAmp extends Command {
 
     @Override
     public void execute() {
-        m_subsystem.setBothShooterMotors(0.12);
+        m_subsystem.setBothShooterMotors(0.17);
     }
 
     @Override

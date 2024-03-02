@@ -19,8 +19,8 @@ public class IntakeInwards extends Command {
 
     @Override
     public void execute () {
-        m_subsystem.setIntake(0.2);
-        m_subsystem.setIndex(0.4);
+        m_subsystem.setIntake(0.15);
+        m_subsystem.setIndex(0.2);
     }
 
     @Override

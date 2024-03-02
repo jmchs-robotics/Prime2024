@@ -19,7 +19,7 @@ public class ShootForSpeaker extends Command {
 
     @Override
     public void execute() {
-        m_subsystem.setBothShooterMotors(0.4);
+        m_subsystem.setBothShooterMotors(0.7);
     }
 
     @Override
