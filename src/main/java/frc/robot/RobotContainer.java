@@ -4,27 +4,18 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OIConstants;
-import frc.robot.commands.DefaultSwerveCommand;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.Constants.*;
+import frc.robot.commands.*;
+import frc.robot.commands.autonomous.AutoPaths;
+import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import java.util.List;
+
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -35,9 +26,24 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   public final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  public final ClimberSubsystem m_climber = new ClimberSubsystem();
+  public final Intake m_intake = new Intake();
+  public final Shooter m_shooter = new Shooter();
 
   // The driver's controller
   XboxController driveStick = new XboxController(OIConstants.kDriverControllerPort);
+  XboxController subStick = new XboxController(OIConstants.kOperatorControllerPort);
+
+  
+  JoystickButton driveA = new JoystickButton(driveStick, XboxController.Button.kA.value);
+  JoystickButton driveStart = new JoystickButton(driveStick, XboxController.Button.kStart.value);
+  JoystickButton driveLB = new JoystickButton(driveStick, XboxController.Button.kLeftBumper.value);
+  JoystickButton subA = new JoystickButton(subStick, XboxController.Button.kA.value);
+  JoystickButton subB = new JoystickButton(subStick, XboxController.Button.kB.value);
+  JoystickButton subX = new JoystickButton(subStick, XboxController.Button.kX.value);
+  JoystickButton subY = new JoystickButton(subStick, XboxController.Button.kY.value);
+  JoystickButton subLB = new JoystickButton(subStick, XboxController.Button.kLeftBumper.value);
+  JoystickButton subRB = new JoystickButton(subStick, XboxController.Button.kRightBumper.value);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -48,6 +54,12 @@ public class RobotContainer {
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(new DefaultSwerveCommand(m_robotDrive, driveStick));
+    m_climber.setDefaultCommand(new DefaultClimberCommand(m_climber, subStick));
+    m_intake.setDefaultCommand(new DefaultIntakeCommand(m_intake));
+    m_shooter.setDefaultCommand(new DefaultShooterCommand(m_shooter));
+
+    NamedCommands.registerCommand("Intake Note", new IntakeInwards(m_intake));
+    NamedCommands.registerCommand("Shoot Note", new ShootForwardTurbo(m_shooter));
   }
 
   /**
@@ -60,10 +72,34 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(driveStick, Button.kR1.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
+    // new JoystickButton(driveStick, Button.kR1.value)
+    //     .whileTrue(new RunCommand(
+    //         () -> m_robotDrive.setX(),
+    //         m_robotDrive));
+
+    subA.whileTrue(
+      new IntakeInwards(m_intake)
+    );
+
+    subB.whileTrue(
+      new IntakeOutwards(m_intake)
+    );
+    
+    subX.whileTrue(
+        new ShootForwardTurbo(m_shooter)
+    );
+
+    subRB.and(subX).whileTrue(
+      new ShootForAmp(m_shooter)
+    );
+
+    subY.whileTrue(
+      new ReverseShooter(m_shooter)
+    );
+
+    driveStart.onTrue(
+      new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive)
+    );
   }
 
   /**
@@ -71,44 +107,36 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    // Create config for trajectory
-    TrajectoryConfig config = new TrajectoryConfig(
-        AutoConstants.kMaxSpeedMetersPerSecond,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        // Add kinematics to ensure max speed is actually obeyed
-        .setKinematics(DriveConstants.kDriveKinematics);
+  public Command getAutonomousCommand(String a) {
+    
+    AutoPaths p = new AutoPaths(m_robotDrive, m_shooter, m_intake, m_climber);
 
-    // An example trajectory to follow. All units in meters.
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
-        // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
-        config);
+    Command autoCommand = null;
 
-    var thetaController = new ProfiledPIDController(
-        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    switch(a) {
+      case "c2":
+        autoCommand = p.center2NoteBase();
+        break;
+      case "ra3bs3":
+        autoCommand = p.red3NoteAmp_blue3NoteSource();
+        break;
+      case "rs3ba3":
+        autoCommand = p.red3NoteSource_blue3NoteAmp();
+        break;
+      case "ra2bs2":
+        autoCommand = p.red2NoteAmp_blue2NoteSource();
+        break;
+      case "rs2ba2":
+        autoCommand = p.red2NoteSource_blue2NoteAmp();
+        break;
+      case "topSide":
+        autoCommand = new PathPlannerAuto("TopSideAuto");
+        break;
+      case "bottomSide":
+        autoCommand = new PathPlannerAuto("BottomSideAuto");
+        break;
+    }
 
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        exampleTrajectory,
-        m_robotDrive::getPose, // Functional interface to feed supplier
-        DriveConstants.kDriveKinematics,
-
-        // Position controllers
-        new PIDController(AutoConstants.kPXController, 0, 0),
-        new PIDController(AutoConstants.kPYController, 0, 0),
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
-
-    // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-
-    // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
+    return autoCommand;
   }
 }

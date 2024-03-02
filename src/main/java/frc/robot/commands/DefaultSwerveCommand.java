@@ -24,15 +24,15 @@ public class DefaultSwerveCommand extends Command {
     @Override
     public void initialize() {}
 
-    @Override
+    @Override   
     public void execute() {
 
         m_subsystem.drive(
-            -MathUtil.applyDeadband(m_stick.getLeftY() * 0.75, OIConstants.kDriveDeadband), 
-            -MathUtil.applyDeadband(m_stick.getLeftX() * 0.75, OIConstants.kDriveDeadband), 
-            -MathUtil.applyDeadband(m_stick.getRightX() * 0.75, OIConstants.kDriveDeadband),
+            -MathUtil.applyDeadband(m_stick.getLeftY() * 0.7, OIConstants.kDriveDeadband), 
+            -MathUtil.applyDeadband(m_stick.getLeftX() * 0.7, OIConstants.kDriveDeadband), 
+            -MathUtil.applyDeadband(m_stick.getRightX() * 0.7, OIConstants.kDriveDeadband),
             true,
-            true
+            false
         );
         
         SmartDashboard.putNumber("Robot Gyro Angle", m_subsystem.getHeading());
@@ -47,6 +47,8 @@ public class DefaultSwerveCommand extends Command {
         SmartDashboard.putNumber("Front Right Turning Encoder Value", m_subsystem.m_frontRight.m_turningEncoder.getPosition());
         SmartDashboard.putNumber("Back Left Turning Encoder Value", m_subsystem.m_rearLeft.m_turningEncoder.getPosition());
         SmartDashboard.putNumber("Back Right Turning Encoder Value", m_subsystem.m_rearRight.m_turningEncoder.getPosition());
+
+        SmartDashboard.putNumber("Robot Pose Angle", m_subsystem.getHeading());
 
     }
 

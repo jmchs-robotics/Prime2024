@@ -7,19 +7,25 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.WPIUtilJNI;
 // import edu.wpi.first.wpilibj.ADIS16470_IMU;
 // import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.pathplanner.lib.auto.AutoBuilder;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
@@ -46,6 +52,20 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset);
 
+  private final MAXSwerveModule[] mSwerveModules = {m_frontLeft, m_frontRight, m_rearLeft, m_rearRight};
+
+  private final Translation2d m_frontLeftLocation = new Translation2d(Units.inchesToMeters(12.75), Units.inchesToMeters(12.75));
+  private final Translation2d m_frontRightLocation = new Translation2d(Units.inchesToMeters(12.75), Units.inchesToMeters(-12.75));
+  private final Translation2d m_backLeftLocation = new Translation2d(Units.inchesToMeters(-12.75), Units.inchesToMeters(12.75));
+  private final Translation2d m_backRightLocation = new Translation2d(Units.inchesToMeters(-12.75), Units.inchesToMeters(-12.75));
+
+  private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
+    m_frontLeftLocation,
+    m_frontRightLocation,
+    m_backLeftLocation,
+    m_backRightLocation
+  );
+
   // The gyro sensor
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
@@ -71,6 +91,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+    configPathPlanner();
   }
 
   @Override
@@ -216,6 +237,23 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearRight.setDesiredState(desiredStates[3]);
   }
 
+  /**
+   * Sets the swerve ModuleStates.
+   * 
+   * @param speed Desired speed of module in meters per second
+   * @param angle Desired angle of module in degrees (CCW Positive)
+   */
+  public void setModuleStates(double speed, double angle) {
+    SwerveModuleState[] wheelStates = {
+      new SwerveModuleState(speed, Rotation2d.fromDegrees(angle)),
+      new SwerveModuleState(speed, Rotation2d.fromDegrees(angle)),
+      new SwerveModuleState(speed, Rotation2d.fromDegrees(angle)),
+      new SwerveModuleState(speed, Rotation2d.fromDegrees(angle))
+    };
+
+    setModuleStates(wheelStates);
+  }
+
   /** Resets the drive encoders to currently read a position of 0. */
   public void resetEncoders() {
     m_frontLeft.resetEncoders();
@@ -252,5 +290,95 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontRight.getDrivingMotor().stopMotor();
     m_rearLeft.getDrivingMotor().stopMotor();
     m_rearRight.getDrivingMotor().stopMotor();
+  }
+
+  public MAXSwerveModule getSwerveModule(int i) {
+    return mSwerveModules[i];
+  }
+
+  public ChassisSpeeds getChassisSpeeds() {
+    return m_kinematics.toChassisSpeeds(
+      m_frontLeft.getState(),
+      m_frontRight.getState(),
+      m_rearLeft.getState(),
+      m_rearRight.getState()
+    );
+  }
+
+  public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
+    ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
+
+    SwerveModuleState[] targetStates = m_kinematics.toSwerveModuleStates(targetSpeeds);
+    setStates(targetStates);
+  }
+
+  public void setStates(SwerveModuleState[] targetStates) {
+    SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, DriveConstants.kMaxSpeedMetersPerSecond);
+
+    for (int i = 0; i < mSwerveModules.length; i++) {
+      mSwerveModules[i].setDesiredState(targetStates[i]);
+    }
+  }
+
+  public double[] calculateSwerveModuleAngles(double forward, double strafe, double rotation) {
+    if (isFieldOriented()) {
+        double angleRad = Math.toRadians(getHeading());
+        double temp = forward * Math.cos(angleRad) + strafe * Math.sin(angleRad);
+        strafe = -forward * Math.sin(angleRad) + strafe * Math.cos(angleRad);
+        forward = temp;
+    }
+
+    double a = strafe - rotation * (DriveConstants.kWheelBase / DriveConstants.kTrackWidth);
+    double b = strafe + rotation * (DriveConstants.kWheelBase / DriveConstants.kTrackWidth);
+    double c = forward - rotation * (DriveConstants.kTrackWidth / DriveConstants.kWheelBase);
+    double d = forward + rotation * (DriveConstants.kTrackWidth / DriveConstants.kWheelBase);
+
+    return new double[]{
+            Math.atan2(b, c) * 180 / Math.PI,
+            Math.atan2(b, d) * 180 / Math.PI,
+            Math.atan2(a, d) * 180 / Math.PI,
+            Math.atan2(a, c) * 180 / Math.PI
+    };
+  }
+
+  public boolean isFieldOriented() {
+    return true;
+  }
+
+  public void setDrivePIDOutputRange( double min, double max) {
+    for( int i=0; i<4; i++) {
+      mSwerveModules[i].setDrivePIDOutputRange(min, max);
+    }
+  }
+
+  /**
+   * So can set the PID output range from an InstantCommand
+   */
+  public void setDrivePIDToSlow() {
+    double x = 0.3; //0.6;//0.5; 
+    setDrivePIDOutputRange(-1 * x, x);
+  }
+
+  public void setDrivePIDToFast() {
+    double x = 1;
+    setDrivePIDOutputRange(-1 * x, x);
+  }
+
+  public void configPathPlanner() {
+
+    AutoBuilder.configureHolonomic(
+      this::getPose, 
+      this::resetOdometry, 
+      this::getChassisSpeeds, 
+      this::driveRobotRelative, 
+      DriveConstants.pathConfig, 
+      () -> {
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+          return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
+      }, 
+      this);
   }
 }

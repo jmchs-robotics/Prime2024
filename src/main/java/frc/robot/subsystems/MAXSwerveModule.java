@@ -16,6 +16,7 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Constants.ModuleConstants;
+import com.revrobotics.CANSparkBase.ControlType;
 
 public class MAXSwerveModule {
   private final CANSparkMax m_drivingSparkMax;
@@ -29,6 +30,9 @@ public class MAXSwerveModule {
 
   private double m_chassisAngularOffset = 0;
   private SwerveModuleState m_desiredState = new SwerveModuleState(0.0, new Rotation2d());
+  
+  private double lastTargetAngle = 0;
+  private double m_autoDist = 0;
 
   /**
    * Constructs a MAXSwerveModule and configures the driving and turning motor,
@@ -135,6 +139,10 @@ public class MAXSwerveModule {
         new Rotation2d(m_turningEncoder.getPosition() - m_chassisAngularOffset));
   }
 
+  public double getPositionTicks() {
+    return m_drivingEncoder.getPosition();
+  }
+
   /**
    * Sets the desired state for the module.
    *
@@ -168,5 +176,80 @@ public class MAXSwerveModule {
 
   public CANSparkMax getTurningMotor() {
     return m_turningSparkMax;
+  }
+
+  public void setTargetAngle(double targetAngle) {
+
+    lastTargetAngle = targetAngle;
+
+    targetAngle %= 360;
+
+    //SmartDashboard.putNumber("Module " + moduleNumber + " Target Angle Desired ", targetAngle % 360);
+
+    // double currentAngle = mAngleMotor.getSelectedSensorPosition(0) * (360.0 / 1024.0); // 2910's original 2018 code
+    // we've set the conversion factor so getPosition returns a value in [0,1)
+    double currentAngle = (m_turningEncoder.getPosition()) * 360.0; 
+    
+    double currentAngleMod = currentAngle % 360;
+    if (currentAngleMod < 0) currentAngleMod += 360;
+
+    double delta = currentAngleMod - targetAngle;
+
+    if (delta > 180) {
+        targetAngle += 360;
+    } else if (delta < -180) {
+        targetAngle -= 360;
+    }
+
+    delta = currentAngleMod - targetAngle;
+    if (delta > 90 || delta < -90) {
+        if (delta > 90)
+            targetAngle += 180;
+        else if (delta < -90)
+            targetAngle -= 180;
+        m_drivingSparkMax.setInverted(false);
+    } else {
+        m_drivingSparkMax.setInverted(true);
+    }
+
+    targetAngle += currentAngle - currentAngleMod;
+
+    targetAngle = targetAngle  / 360.0; // * 3.3;  // changed 11/13/19 to be range of [0, 1) 11/29 range [0, 3.3)
+    m_turningPIDController.setReference(targetAngle, ControlType.kPosition); // new for all Spark Max controllers
+    // SmartDashboard.putNumber("Module " + moduleNumber + " Target Angle Set ", targetAngle);
+  }
+
+  public void setTargetDistance(double distance) {
+    m_autoDist = distance;
+
+    distance = inchesToEncoderTicks(distance);
+
+    // SmartDashboard.putNumber("Module " + moduleNumber + " Drive Ticks ", distance);
+
+    // TODO: confirm the distance is set in the right units
+    m_drivingPIDController.setReference(distance, ControlType.kPosition);
+    // mDriveMotor.set(ControlMode.MotionMagic, distance);
+  }
+
+  public double inchesToEncoderTicks(double inches) {
+    return inches * (1/4.71);
+  }
+
+  public double getDriveDistance() {
+    double ticks = m_drivingEncoder.getPosition();
+
+    return encoderTicksToInches(ticks);
+  }
+
+  public double encoderTicksToInches(double ticks) {
+    return ticks / (1/4.71);
+  }
+
+  public void setTargetSpeed(double speed) {
+    m_drivingSparkMax.set(speed);
+  }
+
+  public void setDrivePIDOutputRange(double min, double max) {
+    m_drivingPIDController.setOutputRange(min, max);
   }
 }

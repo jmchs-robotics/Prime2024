@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -18,6 +20,7 @@ import edu.wpi.first.cameraserver.CameraServer;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
+  private final SendableChooser<String> startPosChooser = new SendableChooser<>();
 
   private RobotContainer m_robotContainer;
 
@@ -32,6 +35,16 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     m_robotContainer.m_robotDrive.zeroHeading();
     // CameraServer.startAutomaticCapture();
+
+    startPosChooser.setDefaultOption("Center 2 Note", "c2");
+    startPosChooser.addOption("Red 3 Note Amp / Blue 3 Note Source", "ra3bs3");
+    startPosChooser.addOption("Red 3 Note Source / Blue 3 Note Amp", "rs3ba3");
+    startPosChooser.addOption("Red 2 Note Amp / Blue 2 Note Source", "ra2bs2");
+    startPosChooser.addOption("Red 2 Note Source / Blue 2 Note Amp", "rs2ba2");
+    startPosChooser.addOption("Top Side Auto (Path Planner)", "topSide");
+    startPosChooser.addOption("Bottom Side Auto (Path Planner)", "bottomSide");
+
+    m_robotContainer.m_robotDrive.resetEncoders();
 
   }
 
@@ -49,6 +62,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    SmartDashboard.putData("Path Chosen", startPosChooser);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -61,7 +75,10 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+
+    String startPos = startPosChooser.getSelected();
+
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand(startPos);
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",

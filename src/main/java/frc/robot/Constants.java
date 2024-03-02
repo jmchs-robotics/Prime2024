@@ -10,6 +10,9 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -27,7 +30,7 @@ public final class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 4.8;
+    public static final double kMaxSpeedMetersPerSecond = 5.5;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     public static final double kDirectionSlewRate = 1.2; // radians per second
@@ -63,6 +66,14 @@ public final class Constants {
     public static final int kRearRightTurningCanId = 42;
 
     public static final boolean kGyroReversed = false;
+
+    public static final HolonomicPathFollowerConfig pathConfig = new HolonomicPathFollowerConfig(
+      new PIDConstants(0.015, 0, 0),
+      new PIDConstants(0.007, 0, 0),
+      3,
+      Units.inchesToMeters(18.03),
+      new ReplanningConfig()
+    );
   }
 
   public static final class ModuleConstants {
@@ -118,7 +129,8 @@ public final class Constants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
-    public static final double kDriveDeadband = 0.1;
+    public static final int kOperatorControllerPort = 1;
+    public static final double kDriveDeadband = 0.15;
   }
 
   public static final class AutoConstants {
@@ -127,16 +139,39 @@ public final class Constants {
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
 
-    public static final double kPXController = 1;
-    public static final double kPYController = 1;
-    public static final double kPThetaController = 1;
+    public static final double kPXController = 0.01;
+    public static final double kPYController = 0.01;
+    public static final double kPThetaController = 0.005;
 
     // Constraint for the motion profiled robot angle controller
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
+
+    // These units are in inches
+    // Some of them are negative because the robot goes backwards
+    public static final double robotToCenterNote = -60.125;
+    public static final double distBetweenNotes = 57.0;
+    public static final double dist3NoteAngled = -33;
   }
 
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }
+
+  public static final class ShooterConstants {
+    public static final int rightShooterID = 1;
+    public static final int leftShooterID = 2;
+  }
+
+  public static final class IntakeConstants {
+    public static final int rightIntakeID = 3;
+    public static final int leftIntakeID = 4;
+    public static final int indexID = 7;
+  }
+
+  public static final class ClimberConstants {
+    public static final int rightClimberID = 5;
+    public static final int leftClimberID = 6;
+  }
+  
 }
