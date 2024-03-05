@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.SPI;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.pathplanner.lib.auto.AutoBuilder;
 
@@ -53,18 +54,6 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kBackRightChassisAngularOffset);
 
   private final MAXSwerveModule[] mSwerveModules = {m_frontLeft, m_frontRight, m_rearLeft, m_rearRight};
-
-  private final Translation2d m_frontLeftLocation = new Translation2d(Units.inchesToMeters(12.75), Units.inchesToMeters(12.75));
-  private final Translation2d m_frontRightLocation = new Translation2d(Units.inchesToMeters(12.75), Units.inchesToMeters(-12.75));
-  private final Translation2d m_backLeftLocation = new Translation2d(Units.inchesToMeters(-12.75), Units.inchesToMeters(12.75));
-  private final Translation2d m_backRightLocation = new Translation2d(Units.inchesToMeters(-12.75), Units.inchesToMeters(-12.75));
-
-  private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
-    m_frontLeftLocation,
-    m_frontRightLocation,
-    m_backLeftLocation,
-    m_backRightLocation
-  );
 
   // The gyro sensor
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
@@ -98,7 +87,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     // Update the odometry in the periodic block
     m_odometry.update(
-        Rotation2d.fromDegrees(m_gyro.getYaw()),
+        Rotation2d.fromDegrees(-m_gyro.getYaw()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -123,7 +112,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(
-        Rotation2d.fromDegrees(m_gyro.getYaw()),
+        Rotation2d.fromDegrees(-m_gyro.getYaw()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -254,6 +243,15 @@ public class DriveSubsystem extends SubsystemBase {
     setModuleStates(wheelStates);
   }
 
+  public SwerveModuleState[] getModuleStates(){
+    SwerveModuleState[] currentStates = new SwerveModuleState[mSwerveModules.length];
+    for (int i = 0; i < mSwerveModules.length; i++){
+      currentStates[i] = mSwerveModules[i].getState();
+    }
+    return currentStates;
+      
+  }
+
   /** Resets the drive encoders to currently read a position of 0. */
   public void resetEncoders() {
     m_frontLeft.resetEncoders();
@@ -297,18 +295,13 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public ChassisSpeeds getChassisSpeeds() {
-    return m_kinematics.toChassisSpeeds(
-      m_frontLeft.getState(),
-      m_frontRight.getState(),
-      m_rearLeft.getState(),
-      m_rearRight.getState()
-    );
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
   }
 
   public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
 
-    SwerveModuleState[] targetStates = m_kinematics.toSwerveModuleStates(targetSpeeds);
+    SwerveModuleState[] targetStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
     setStates(targetStates);
   }
 
@@ -325,7 +318,7 @@ public class DriveSubsystem extends SubsystemBase {
     AutoBuilder.configureHolonomic(
       this::getPose, 
       this::resetOdometry, 
-      this::getChassisSpeeds, 
+      () -> DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates()), 
       this::driveRobotRelative, 
       DriveConstants.pathConfig, 
       () -> {
@@ -336,5 +329,9 @@ public class DriveSubsystem extends SubsystemBase {
         return false;
       }, 
       this);
+  }
+
+  public Command getAuto(String name) {
+    return AutoBuilder.buildAuto(name);
   }
 }

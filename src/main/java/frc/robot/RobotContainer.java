@@ -130,10 +130,10 @@ public class RobotContainer {
         autoCommand = p.red2NoteSource_blue2NoteAmp();
         break;
       case "topSide":
-        autoCommand = new PathPlannerAuto("TopSideAuto");
+        autoCommand = m_robotDrive.getAuto("TopSideAuto");
         break;
       case "bottomSide":
-        autoCommand = new PathPlannerAuto("BottomSideAuto");
+        autoCommand = m_robotDrive.getAuto("BottomSideAuto");
         break;
     }
 
