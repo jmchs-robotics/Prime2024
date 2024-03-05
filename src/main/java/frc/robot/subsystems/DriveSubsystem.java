@@ -21,6 +21,8 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
@@ -92,7 +94,11 @@ public class DriveSubsystem extends SubsystemBase {
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     configPathPlanner();
+
+    SmartDashboard.putData("Field", m_field); // field test 1
   }
+
+  private final Field2d m_field = new Field2d(); // field test 2
 
   @Override
   public void periodic() {
@@ -105,6 +111,8 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+    
+    m_field.setRobotPose(m_odometry.getPoseMeters());
   }
 
   /**
