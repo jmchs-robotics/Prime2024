@@ -21,6 +21,7 @@ import frc.robot.commands.IntakeInwards;
 import frc.robot.commands.IntakeOutwards;
 import frc.robot.commands.ShootForSpeaker;
 import frc.robot.commands.ShootForwardTurbo;
+import frc.robot.commands.ShootForwardTurbo;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
@@ -285,11 +286,7 @@ public class AutoPaths extends Command {
         m_drive.resetOdometry(goOut.getInitialPose());
 
         return new SequentialCommandGroup(
-            new ShootForwardTurbo(m_shooter).withTimeout(0.5),
-            new ParallelCommandGroup(
-                new IntakeInwards(m_intake).withTimeout(1),
-                new ShootForwardTurbo(m_shooter).withTimeout(1)
-            ),
+            new ShootForwardTurbo(m_shooter, m_intake).withTimeout(1.5),
             new WaitCommand(w),
             new ParallelRaceGroup(
                 goOutCommand,
@@ -298,11 +295,7 @@ public class AutoPaths extends Command {
             new WaitCommand(w),
             goBackInCommand,           
             new WaitCommand(w),
-            new ShootForwardTurbo(m_shooter).withTimeout(0.5),
-            new ParallelCommandGroup(
-                new IntakeInwards(m_intake).withTimeout(1),
-                new ShootForwardTurbo(m_shooter).withTimeout(1)
-            )
+            new ShootForwardTurbo(m_shooter, m_intake).withTimeout(1.5)
         );
     }
 
@@ -347,11 +340,7 @@ public class AutoPaths extends Command {
         m_drive.resetOdometry(goOut.getInitialPose());
 
         return new SequentialCommandGroup(
-            new ShootForwardTurbo(m_shooter).withTimeout(0.5),
-            new ParallelCommandGroup(
-                new IntakeInwards(m_intake).withTimeout(1),
-                new ShootForwardTurbo(m_shooter).withTimeout(1)
-            ),
+            new ShootForwardTurbo(m_shooter, m_intake).withTimeout(1.5),
             new WaitCommand(w),
             new ParallelRaceGroup(
                 goOutCommand,
@@ -360,11 +349,7 @@ public class AutoPaths extends Command {
             new WaitCommand(w),
             goBackInCommand,           
             new WaitCommand(w),
-            new ShootForwardTurbo(m_shooter).withTimeout(0.5),
-            new ParallelCommandGroup(
-                new IntakeInwards(m_intake).withTimeout(1),
-                new ShootForwardTurbo(m_shooter).withTimeout(1)
-            )
+            new ShootForwardTurbo(m_shooter, m_intake).withTimeout(1.5)
         );
     }
 

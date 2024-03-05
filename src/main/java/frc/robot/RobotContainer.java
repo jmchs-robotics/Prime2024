@@ -59,7 +59,7 @@ public class RobotContainer {
     m_shooter.setDefaultCommand(new DefaultShooterCommand(m_shooter));
 
     NamedCommands.registerCommand("Intake Note", new IntakeInwards(m_intake));
-    NamedCommands.registerCommand("Shoot Note", new ShootForwardTurbo(m_shooter));
+    NamedCommands.registerCommand("Shoot Note", new ShootForwardTurbo(m_shooter, m_intake));
   }
 
   /**
@@ -86,7 +86,7 @@ public class RobotContainer {
     );
     
     subX.whileTrue(
-        new ShootForwardTurbo(m_shooter)
+        new ShootForwardTurbo(m_shooter, m_intake)
     );
 
     subRB.and(subX).whileTrue(

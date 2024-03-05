@@ -320,50 +320,6 @@ public class DriveSubsystem extends SubsystemBase {
     }
   }
 
-  public double[] calculateSwerveModuleAngles(double forward, double strafe, double rotation) {
-    if (isFieldOriented()) {
-        double angleRad = Math.toRadians(getHeading());
-        double temp = forward * Math.cos(angleRad) + strafe * Math.sin(angleRad);
-        strafe = -forward * Math.sin(angleRad) + strafe * Math.cos(angleRad);
-        forward = temp;
-    }
-
-    double a = strafe - rotation * (DriveConstants.kWheelBase / DriveConstants.kTrackWidth);
-    double b = strafe + rotation * (DriveConstants.kWheelBase / DriveConstants.kTrackWidth);
-    double c = forward - rotation * (DriveConstants.kTrackWidth / DriveConstants.kWheelBase);
-    double d = forward + rotation * (DriveConstants.kTrackWidth / DriveConstants.kWheelBase);
-
-    return new double[]{
-            Math.atan2(b, c) * 180 / Math.PI,
-            Math.atan2(b, d) * 180 / Math.PI,
-            Math.atan2(a, d) * 180 / Math.PI,
-            Math.atan2(a, c) * 180 / Math.PI
-    };
-  }
-
-  public boolean isFieldOriented() {
-    return true;
-  }
-
-  public void setDrivePIDOutputRange( double min, double max) {
-    for( int i=0; i<4; i++) {
-      mSwerveModules[i].setDrivePIDOutputRange(min, max);
-    }
-  }
-
-  /**
-   * So can set the PID output range from an InstantCommand
-   */
-  public void setDrivePIDToSlow() {
-    double x = 0.3; //0.6;//0.5; 
-    setDrivePIDOutputRange(-1 * x, x);
-  }
-
-  public void setDrivePIDToFast() {
-    double x = 1;
-    setDrivePIDOutputRange(-1 * x, x);
-  }
-
   public void configPathPlanner() {
 
     AutoBuilder.configureHolonomic(

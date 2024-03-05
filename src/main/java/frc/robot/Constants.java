@@ -30,12 +30,12 @@ public final class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 5.5;
+    public static final double kMaxSpeedMetersPerSecond = 5;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
-    public static final double kDirectionSlewRate = 1.2; // radians per second
-    public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
-    public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
+    public static final double kDirectionSlewRate = 2 * Math.PI; // radians per second
+    public static final double kMagnitudeSlewRate = 6; // percent per second (1 = 100%)
+    public static final double kRotationalSlewRate = 5; // percent per second (1 = 100%)
 
     // Chassis configuration
     public static final double kTrackWidth = Units.inchesToMeters(25.5);
@@ -68,9 +68,9 @@ public final class Constants {
     public static final boolean kGyroReversed = false;
 
     public static final HolonomicPathFollowerConfig pathConfig = new HolonomicPathFollowerConfig(
-      new PIDConstants(0.015, 0, 0),
-      new PIDConstants(0.007, 0, 0),
-      3,
+      new PIDConstants(0.1, 0, 0),
+      new PIDConstants(0.1, 0, 0),
+      5,
       Units.inchesToMeters(18.03),
       new ReplanningConfig()
     );
@@ -106,7 +106,7 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = 0.04;
+    public static final double kDrivingP = 0.05;
     public static final double kDrivingI = 0;
     public static final double kDrivingD = 0;
     public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;

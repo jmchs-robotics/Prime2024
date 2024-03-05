@@ -20,7 +20,7 @@ public class Intake extends SubsystemBase {
 
         rightIntakeMotor.setNeutralMode(NeutralModeValue.Brake);
         leftIntakeMotor.setNeutralMode(NeutralModeValue.Brake);
-        indexMotor.setNeutralMode(NeutralModeValue.Brake);
+        indexMotor.setNeutralMode(NeutralModeValue.Coast);
 
         rightIntakeMotor.setInverted(false);
         leftIntakeMotor.setInverted(false);
