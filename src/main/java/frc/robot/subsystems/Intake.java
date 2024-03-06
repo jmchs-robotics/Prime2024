@@ -18,8 +18,8 @@ public class Intake extends SubsystemBase {
         leftIntakeMotor = new TalonFX(IntakeConstants.leftIntakeID);
         indexMotor = new TalonFX(IntakeConstants.indexID);
 
-        rightIntakeMotor.setNeutralMode(NeutralModeValue.Brake);
-        leftIntakeMotor.setNeutralMode(NeutralModeValue.Brake);
+        rightIntakeMotor.setNeutralMode(NeutralModeValue.Coast);
+        leftIntakeMotor.setNeutralMode(NeutralModeValue.Coast);
         indexMotor.setNeutralMode(NeutralModeValue.Coast);
 
         rightIntakeMotor.setInverted(false);

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8,
-        "y": 6.8
+        "x": 0.97,
+        "y": 6.85
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.896334058060603,
-        "y": 6.626357743805344
+        "x": 2.0663340580606033,
+        "y": 6.676357743805344
       },
       "isLocked": false,
       "linkedName": "TopSideOutStart"
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.15,
       "command": {
         "type": "parallel",
         "data": {
@@ -63,7 +63,7 @@
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": -118.88658176691065,
+    "rotation": -120.0,
     "velocity": 0
   },
   "useDefaultConstraints": true
