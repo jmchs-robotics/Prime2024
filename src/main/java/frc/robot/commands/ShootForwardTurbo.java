@@ -27,11 +27,12 @@ public class ShootForwardTurbo extends Command {
 
     @Override
     public void execute() {
-        if (timer.get() < 0.5) {
+        if (timer.get() < 1) {
             m_shooter.setBothShooterMotors(0.9);
         } else {
             m_shooter.setBothShooterMotors(0.9);
             m_intake.setIndex(0.4);
+            m_intake.setIntake(0.15);
         }
         
     }

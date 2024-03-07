@@ -43,6 +43,7 @@ public class Robot extends TimedRobot {
     startPosChooser.addOption("Red 2 Note Source / Blue 2 Note Amp", "rs2ba2");
     startPosChooser.addOption("Top Side Auto (Path Planner)", "topSide");
     startPosChooser.addOption("Bottom Side Auto (Path Planner)", "bottomSide");
+    startPosChooser.addOption("Center Side Auto (Path Planner)", "centerSide");
 
     m_robotContainer.m_robotDrive.resetEncoders();
 

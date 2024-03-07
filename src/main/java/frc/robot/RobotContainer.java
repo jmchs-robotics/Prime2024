@@ -135,6 +135,8 @@ public class RobotContainer {
       case "bottomSide":
         autoCommand = m_robotDrive.getAuto("BottomSideAuto");
         break;
+      case "centerSide":
+        autoCommand = m_robotDrive.getAuto("CenterSideAuto");
     }
 
     return autoCommand;

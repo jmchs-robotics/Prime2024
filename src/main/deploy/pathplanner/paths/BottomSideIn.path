@@ -30,7 +30,31 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.0,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake Note"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 0.1
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -39,11 +63,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 97.38087764202255,
+    "rotation": 102.4214001124104,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Bottom Side",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

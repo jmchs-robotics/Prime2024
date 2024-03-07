@@ -68,8 +68,8 @@ public final class Constants {
     public static final boolean kGyroReversed = false;
 
     public static final HolonomicPathFollowerConfig pathConfig = new HolonomicPathFollowerConfig(
-      new PIDConstants(0.07, 0, 0),
-      new PIDConstants(0.15, 0, 0),
+      new PIDConstants(0.20, 0, 0),
+      new PIDConstants(0.20, 0, 0),
       5,
       Units.inchesToMeters(18.03),
       new ReplanningConfig()
@@ -113,7 +113,7 @@ public final class Constants {
     public static final double kDrivingMinOutput = -1;
     public static final double kDrivingMaxOutput = 1;
 
-    public static final double kTurningP = 1;
+    public static final double kTurningP = 0.9;
     public static final double kTurningI = 0;
     public static final double kTurningD = 0;
     public static final double kTurningFF = 0;

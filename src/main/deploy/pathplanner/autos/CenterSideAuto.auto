@@ -2,44 +2,25 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.97,
-      "y": 6.85
+      "x": 1.36,
+      "y": 5.55
     },
-    "rotation": -120.0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "race",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Shoot Note"
-                }
-              },
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 2.0
-                }
-              }
-            ]
+            "pathName": "CenterSideOut"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "TopSideOut"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "TopSideIn"
+            "pathName": "CenterSideIn"
           }
         },
         {
@@ -55,7 +36,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.0
+                  "waitTime": 3.0
                 }
               }
             ]
