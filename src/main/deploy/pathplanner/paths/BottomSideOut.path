@@ -3,24 +3,24 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.97,
-        "y": 4.09
+        "x": 0.95,
+        "y": 4.04
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6299690758653218,
-        "y": 4.230500791518972
+        "x": 1.6099690758653216,
+        "y": 4.1805007915189725
       },
       "isLocked": false,
       "linkedName": "BottomSideOutStart"
     },
     {
       "anchor": {
-        "x": 2.5,
+        "x": 2.75,
         "y": 4.1
       },
       "prevControl": {
-        "x": 1.6455092288054407,
+        "x": 1.895509228805441,
         "y": 4.230500791518972
       },
       "nextControl": null,
@@ -28,12 +28,18 @@
       "linkedName": "BottomSideOutEnd"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 170.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.15,
+      "waypointRelativePos": 0.25,
       "command": {
         "type": "race",
         "data": {
