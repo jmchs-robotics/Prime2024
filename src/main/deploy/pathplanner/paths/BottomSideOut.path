@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6099690758653216,
-        "y": 4.1805007915189725
+        "x": 1.5599471997802752,
+        "y": 3.946551915928368
       },
       "isLocked": false,
       "linkedName": "BottomSideOutStart"
     },
     {
       "anchor": {
-        "x": 2.75,
-        "y": 4.1
+        "x": 3.0,
+        "y": 4.0
       },
       "prevControl": {
-        "x": 1.895509228805441,
-        "y": 4.230500791518972
+        "x": 2.086934844340443,
+        "y": 3.916816935203058
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": 170.0,
+      "rotationDegrees": 180.0,
       "rotateFast": false
     }
   ],
@@ -63,7 +63,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": -175.0,
     "rotateFast": false
   },
   "reversed": false,

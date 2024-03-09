@@ -7,6 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.*;
 import frc.robot.commands.*;
@@ -33,7 +34,7 @@ public class RobotContainer {
   // The driver's controller
   XboxController driveStick = new XboxController(OIConstants.kDriverControllerPort);
   XboxController subStick = new XboxController(OIConstants.kOperatorControllerPort);
-
+  Joystick planeStick = new Joystick(OIConstants.kDriverControllerPort);
   
   JoystickButton driveA = new JoystickButton(driveStick, XboxController.Button.kA.value);
   JoystickButton driveStart = new JoystickButton(driveStick, XboxController.Button.kStart.value);
