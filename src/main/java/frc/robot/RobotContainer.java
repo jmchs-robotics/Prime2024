@@ -101,6 +101,10 @@ public class RobotContainer {
     driveStart.onTrue(
       new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive)
     );
+
+    driveA.whileTrue(
+      new LimelightAiming(m_robotDrive)
+    );
   }
 
   /**
