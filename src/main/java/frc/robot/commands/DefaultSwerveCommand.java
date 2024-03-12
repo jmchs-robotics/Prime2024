@@ -8,17 +8,13 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.Constants.OIConstants;
 
 public class DefaultSwerveCommand extends Command {
+    private DriveSubsystem m_drivesubsystem;
+    private XboxController m_controller;
 
-    private DriveSubsystem m_subsystem;
-    private XboxController m_stick;
-
-    public DefaultSwerveCommand(DriveSubsystem subsystem, XboxController stick) {
-
-        m_subsystem = subsystem;
-        m_stick = stick;
-
-        addRequirements(subsystem);
-
+    public DefaultSwerveCommand(DriveSubsystem drivesubsystem, XboxController controller) {
+        m_drivesubsystem = drivesubsystem;
+        m_controller = controller;
+        addRequirements(drivesubsystem);
     }
 
     @Override
@@ -26,17 +22,14 @@ public class DefaultSwerveCommand extends Command {
 
     @Override   
     public void execute() {
-
-        m_subsystem.drive(
-            -MathUtil.applyDeadband(m_stick.getLeftY() * 0.9, OIConstants.kDriveDeadband), 
-            -MathUtil.applyDeadband(m_stick.getLeftX() * 0.9, OIConstants.kDriveDeadband), 
-            -MathUtil.applyDeadband(m_stick.getRightX() * 0.9, OIConstants.kDriveDeadband),
+        m_drivesubsystem.drive(
+            -MathUtil.applyDeadband(m_controller.getLeftY() * 0.9, OIConstants.kDriveDeadband), 
+            -MathUtil.applyDeadband(m_controller.getLeftX() * 0.9, OIConstants.kDriveDeadband), 
+            -MathUtil.applyDeadband(m_controller.getRightX() * 0.9, OIConstants.kDriveDeadband),
             true,
             true
         );
-
-        SmartDashboard.putNumber("Robot Angle", m_subsystem.getHeading());
-
+        SmartDashboard.putNumber("Robot Angle", m_drivesubsystem.getHeading());
     }
 
     @Override
@@ -46,7 +39,6 @@ public class DefaultSwerveCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        m_subsystem.stopDriveMotors();
+        m_drivesubsystem.stopDriveMotors();
     }
-
 }

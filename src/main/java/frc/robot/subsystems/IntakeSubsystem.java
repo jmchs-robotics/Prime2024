@@ -6,14 +6,12 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
-public class Intake extends SubsystemBase {
-
+public class IntakeSubsystem extends SubsystemBase {
     private final TalonFX rightIntakeMotor;
     private final TalonFX leftIntakeMotor;
     private final TalonFX indexMotor;
 
-    public Intake() {
-
+    public IntakeSubsystem() {
         rightIntakeMotor = new TalonFX(IntakeConstants.rightIntakeID);
         leftIntakeMotor = new TalonFX(IntakeConstants.leftIntakeID);
         indexMotor = new TalonFX(IntakeConstants.indexID);
@@ -25,7 +23,6 @@ public class Intake extends SubsystemBase {
         rightIntakeMotor.setInverted(false);
         leftIntakeMotor.setInverted(false);
         indexMotor.setInverted(true);
-
     }
 
     @Override
@@ -51,5 +48,4 @@ public class Intake extends SubsystemBase {
     public void stopIndex() {
         indexMotor.stopMotor();
     }
-    
 }

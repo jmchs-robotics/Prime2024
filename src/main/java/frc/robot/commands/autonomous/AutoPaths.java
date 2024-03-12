@@ -24,8 +24,8 @@ import frc.robot.commands.ShootForwardTurbo;
 import frc.robot.commands.ShootForwardTurbo;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.commands.autonomous.*;
 
 import java.util.List;
@@ -34,8 +34,8 @@ import edu.wpi.first.math.util.Units;
 public class AutoPaths extends Command {
 
     DriveSubsystem m_drive;
-    Shooter m_shooter;
-    Intake m_intake;
+    ShooterSubsystem m_shooter;
+    IntakeSubsystem m_intake;
     ClimberSubsystem m_climber;
 
     TrajectoryConfig config = new TrajectoryConfig(
@@ -47,7 +47,7 @@ public class AutoPaths extends Command {
     
     double w = 0.25;
 
-    public AutoPaths(DriveSubsystem drive, Shooter shooter, Intake intake, ClimberSubsystem climber) {
+    public AutoPaths(DriveSubsystem drive, ShooterSubsystem shooter, IntakeSubsystem intake, ClimberSubsystem climber) {
         m_drive = drive;
         m_shooter = shooter;
         m_intake = intake;

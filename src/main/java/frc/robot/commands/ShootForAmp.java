@@ -1,17 +1,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShootForAmp extends Command {
+    private ShooterSubsystem m_shootersubsystem;
 
-    private Shooter m_subsystem;
-
-    public ShootForAmp(Shooter subsystem) {
-
-        m_subsystem = subsystem;
-        addRequirements(m_subsystem);
-    
+    public ShootForAmp(ShooterSubsystem shootersubsystem) {
+        m_shootersubsystem = shootersubsystem;
+        addRequirements(shootersubsystem);
     }
 
     @Override
@@ -19,7 +16,7 @@ public class ShootForAmp extends Command {
 
     @Override
     public void execute() {
-        m_subsystem.setBothShooterMotors(0.17);
+        m_shootersubsystem.setBothShooterMotors(0.17);
     }
 
     @Override
@@ -29,12 +26,11 @@ public class ShootForAmp extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        m_subsystem.stopBothShooterMotors();
+        m_shootersubsystem.stopBothShooterMotors();
     }
 
     @Override
     public boolean runsWhenDisabled() {
         return false;
-    }
-    
+    }   
 }

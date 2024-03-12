@@ -7,17 +7,13 @@ import edu.wpi.first.math.MathUtil;
 import frc.robot.subsystems.ClimberSubsystem;
 
 public class DefaultClimberCommand extends Command {
+    private final XboxController m_controller;
+    private final ClimberSubsystem m_climbersubsystem;
 
-    private final XboxController m_stick;
-    private final ClimberSubsystem m_subsystem;
-
-    public DefaultClimberCommand(ClimberSubsystem subsystem, XboxController stick) {
-
-        m_stick = stick;
-
-        m_subsystem = subsystem;
-        addRequirements(subsystem);
-
+    public DefaultClimberCommand(ClimberSubsystem climbersubsystem, XboxController controller) {
+        m_controller = controller;
+        m_climbersubsystem = climbersubsystem;
+        addRequirements(climbersubsystem);
     }
 
     @Override
@@ -25,11 +21,8 @@ public class DefaultClimberCommand extends Command {
 
     @Override
     public void execute() {
-
-        // m_subsystem.spinLeftMotor(MathUtil.applyDeadband(m_stick.getLeftY() * 0.75, OIConstants.kDriveDeadband));
-        // m_subsystem.spinRightMotor(MathUtil.applyDeadband(m_stick.getRightY() * 0.75, OIConstants.kDriveDeadband));
-        
-
+        // m_climbersubsystem.spinLeftMotor(MathUtil.applyDeadband(m_controller.getLeftY() * 0.75, OIConstants.kDriveDeadband));
+        // m_climbersubsystem.spinRightMotor(MathUtil.applyDeadband(m_controller.getRightY() * 0.75, OIConstants.kDriveDeadband));
     }
 
     @Override
@@ -39,7 +32,6 @@ public class DefaultClimberCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        m_subsystem.stopBothMotors();
+        m_climbersubsystem.stopBothMotors();
     }
-    
 }

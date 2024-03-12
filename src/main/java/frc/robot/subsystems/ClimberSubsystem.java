@@ -5,7 +5,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import frc.robot.Constants.ClimberConstants;
 
 public class ClimberSubsystem extends SubsystemBase {
-
     private final TalonFX rightClimberMotor;
     private final TalonFX leftClimberMotor;
 

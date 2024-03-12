@@ -28,8 +28,8 @@ public class RobotContainer {
   // The robot's subsystems
   public final DriveSubsystem m_robotDrive = new DriveSubsystem();
   public final ClimberSubsystem m_climber = new ClimberSubsystem();
-  public final Intake m_intake = new Intake();
-  public final Shooter m_shooter = new Shooter();
+  public final IntakeSubsystem m_intake = new IntakeSubsystem();
+  public final ShooterSubsystem m_shooter = new ShooterSubsystem();
 
   // The driver's controller
   XboxController driveStick = new XboxController(OIConstants.kDriverControllerPort);

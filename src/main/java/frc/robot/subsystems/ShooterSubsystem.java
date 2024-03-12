@@ -6,13 +6,11 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import frc.robot.Constants.ShooterConstants;
 
-public class Shooter extends SubsystemBase {
-
+public class ShooterSubsystem extends SubsystemBase {
     private final TalonFX rightShooterMotor;
     private final TalonFX leftShooterMotor;
 
-    public Shooter() {
-
+    public ShooterSubsystem() {
         rightShooterMotor = new TalonFX(ShooterConstants.rightShooterID);
         addChild("rightShooterTalon", rightShooterMotor);
         rightShooterMotor.setInverted(true);
@@ -23,7 +21,6 @@ public class Shooter extends SubsystemBase {
 
         rightShooterMotor.setNeutralMode(NeutralModeValue.Brake);
         leftShooterMotor.setNeutralMode(NeutralModeValue.Brake);
-
     }
 
     @Override
@@ -57,5 +54,4 @@ public class Shooter extends SubsystemBase {
         rightShooterMotor.stopMotor();
         leftShooterMotor.stopMotor();
     }
-    
 }
