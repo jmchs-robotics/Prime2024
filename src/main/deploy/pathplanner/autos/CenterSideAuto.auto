@@ -28,12 +28,6 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "Shoot Note"
-                }
-              },
-              {
                 "type": "wait",
                 "data": {
                   "waitTime": 3.0

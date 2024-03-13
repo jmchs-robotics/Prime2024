@@ -51,12 +51,6 @@
         "data": {
           "commands": [
             {
-              "type": "named",
-              "data": {
-                "name": "Shoot Note"
-              }
-            },
-            {
               "type": "wait",
               "data": {
                 "waitTime": 2.0

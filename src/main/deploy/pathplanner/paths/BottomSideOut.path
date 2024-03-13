@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5599471997802752,
-        "y": 3.946551915928368
+        "x": 1.5950797094176201,
+        "y": 4.087081954477746
       },
       "isLocked": false,
       "linkedName": "BottomSideOutStart"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 3.0,
-        "y": 4.0
+        "y": 4.1
       },
       "prevControl": {
-        "x": 2.086934844340443,
-        "y": 3.916816935203058
+        "x": 2.0635131712488803,
+        "y": 4.163660281386183
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,14 +43,7 @@
       "command": {
         "type": "race",
         "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Intake Note"
-              }
-            }
-          ]
+          "commands": []
         }
       }
     }
