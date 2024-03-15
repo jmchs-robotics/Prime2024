@@ -35,7 +35,7 @@
       "minWaypointRelativePos": 0,
       "maxWaypointRelativePos": 0.45,
       "constraints": {
-        "maxVelocity": 0.7,
+        "maxVelocity": 0.6,
         "maxAcceleration": 1.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0
@@ -51,9 +51,15 @@
         "data": {
           "commands": [
             {
+              "type": "named",
+              "data": {
+                "name": "Shoot Note"
+              }
+            },
+            {
               "type": "wait",
               "data": {
-                "waitTime": 2.0
+                "waitTime": 1.25
               }
             }
           ]

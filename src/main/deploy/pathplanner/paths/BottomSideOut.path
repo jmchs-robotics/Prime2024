@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 3.0,
-        "y": 4.1
+        "y": 3.95
       },
       "prevControl": {
         "x": 2.0635131712488803,
-        "y": 4.163660281386183
+        "y": 4.0136602813861835
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,14 @@
       "command": {
         "type": "race",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake Note"
+              }
+            }
+          ]
         }
       }
     }

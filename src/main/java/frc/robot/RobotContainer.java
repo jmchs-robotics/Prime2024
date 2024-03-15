@@ -61,6 +61,7 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Intake Note", new IntakeInwards(m_intake));
     NamedCommands.registerCommand("Shoot Note", new ShootForwardTurbo(m_shooter, m_intake));
+    NamedCommands.registerCommand("Reverse Shooter", new ReverseShooter(m_shooter));
   }
 
   /**
