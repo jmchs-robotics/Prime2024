@@ -2,15 +2,21 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.97,
-      "y": 6.85
+      "x": 1.72,
+      "y": 5.5
     },
-    "rotation": -120.0
+    "rotation": 175.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterSideOutBottom"
+          }
+        },
         {
           "type": "race",
           "data": {
@@ -18,13 +24,32 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Shoot Note"
+                  "name": "Intake Note"
                 }
               },
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.5
+                  "waitTime": 0.01
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Reverse Shooter"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.2
                 }
               }
             ]
@@ -33,13 +58,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TopSideOut"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "TopSideIn"
+            "pathName": "CenterSideInBottom"
           }
         },
         {

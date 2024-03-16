@@ -15,6 +15,7 @@ import frc.robot.commands.autonomous.AutoPaths;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 
@@ -143,6 +144,13 @@ public class RobotContainer {
         break;
       case "centerSide":
         autoCommand = m_robotDrive.getAuto("CenterSideAuto");
+        break;
+      case "centerSide3Bottom":
+        autoCommand = new SequentialCommandGroup(
+          m_robotDrive.getAuto("CenterSideAuto"),
+          m_robotDrive.getAuto("CenterSideAuto3NoteBottom")
+        );
+        break;
     }
 
     return autoCommand;

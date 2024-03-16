@@ -3,49 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.36,
-        "y": 5.55
+        "x": 1.72,
+        "y": 5.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3600000000000003,
-        "y": 5.55
+        "x": 2.2199999999999998,
+        "y": 5.5
       },
       "isLocked": false,
-      "linkedName": "CenterSideOutStart"
+      "linkedName": "CenterSideInEnd"
     },
     {
       "anchor": {
-        "x": 3.1,
-        "y": 5.55
+        "x": 2.9,
+        "y": 4.1
       },
       "prevControl": {
-        "x": 2.1,
-        "y": 5.55
+        "x": 2.0999999999999996,
+        "y": 4.1
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "CenterSideOutEnd"
+      "linkedName": "CenterSideOutBottomEnd"
     }
   ],
-  "rotationTargets": [],
-  "constraintZones": [
+  "rotationTargets": [
     {
-      "name": "New Constraints Zone",
-      "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 0.45,
-      "constraints": {
-        "maxVelocity": 0.4,
-        "maxAcceleration": 1.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0
-      }
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 168.0,
+      "rotateFast": false
     }
   ],
+  "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Shooting and Moving",
-      "waypointRelativePos": 0,
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.5,
       "command": {
         "type": "race",
         "data": {
@@ -53,13 +47,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Shoot Note"
-              }
-            },
-            {
-              "type": "wait",
-              "data": {
-                "waitTime": 1.25
+                "name": "Intake Note"
               }
             }
           ]
@@ -75,7 +63,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -175.0,
+    "rotation": 150.0,
     "rotateFast": false
   },
   "reversed": false,
