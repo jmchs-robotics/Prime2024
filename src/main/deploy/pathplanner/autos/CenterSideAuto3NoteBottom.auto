@@ -72,6 +72,12 @@
                 }
               },
               {
+                "type": "named",
+                "data": {
+                  "name": "Limelight Aim"
+                }
+              },
+              {
                 "type": "wait",
                 "data": {
                   "waitTime": 1.5

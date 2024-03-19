@@ -15,7 +15,9 @@ import frc.robot.commands.autonomous.AutoPaths;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 
@@ -63,6 +65,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("Intake Note", new IntakeInwards(m_intake));
     NamedCommands.registerCommand("Shoot Note", new ShootForwardTurbo(m_shooter, m_intake));
     NamedCommands.registerCommand("Reverse Shooter", new ReverseShooter(m_shooter));
+    NamedCommands.registerCommand("Reverse Intake", new IntakeOutwards(m_intake));
+    NamedCommands.registerCommand("Limelight Aim", new LimelightAiming(m_robotDrive, driveStick));
   }
 
   /**
@@ -104,8 +108,8 @@ public class RobotContainer {
       new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive)
     );
 
-    driveA.whileTrue(
-      new LimelightAiming(m_robotDrive)
+    driveLB.whileTrue(
+      new LimelightAiming(m_robotDrive, driveStick)
     );
   }
 
@@ -148,7 +152,12 @@ public class RobotContainer {
       case "centerSide3Bottom":
         autoCommand = new SequentialCommandGroup(
           m_robotDrive.getAuto("CenterSideAuto"),
-          m_robotDrive.getAuto("CenterSideAuto3NoteBottom")
+          m_robotDrive.getAuto("CenterSideAuto3NoteBottom"),
+          new WaitCommand(0.25),
+          new InstantCommand(m_shooter::stopBothShooterMotors),
+          new InstantCommand(m_intake::stopIntake),
+          new InstantCommand(m_intake::stopIndex),
+          new RunCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive)
         );
         break;
     }

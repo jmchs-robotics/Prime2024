@@ -47,9 +47,15 @@
                 }
               },
               {
+                "type": "named",
+                "data": {
+                  "name": "Reverse Intake"
+                }
+              },
+              {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.25
+                  "waitTime": 0.2
                 }
               }
             ]
@@ -69,6 +75,12 @@
                 "type": "named",
                 "data": {
                   "name": "Shoot Note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Limelight Aim"
                 }
               },
               {
