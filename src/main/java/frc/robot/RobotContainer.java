@@ -33,21 +33,24 @@ public class RobotContainer {
   public final ClimberSubsystem m_climber = new ClimberSubsystem();
   public final IntakeSubsystem m_intake = new IntakeSubsystem();
   public final ShooterSubsystem m_shooter = new ShooterSubsystem();
+  public final AmpSubsystem m_amp = new AmpSubsystem();
 
   // The driver's controller
   XboxController driveStick = new XboxController(OIConstants.kDriverControllerPort);
   XboxController subStick = new XboxController(OIConstants.kOperatorControllerPort);
-  Joystick planeStick = new Joystick(OIConstants.kDriverControllerPort);
   
   JoystickButton driveA = new JoystickButton(driveStick, XboxController.Button.kA.value);
   JoystickButton driveStart = new JoystickButton(driveStick, XboxController.Button.kStart.value);
   JoystickButton driveLB = new JoystickButton(driveStick, XboxController.Button.kLeftBumper.value);
+  JoystickButton driveRB = new JoystickButton(driveStick, XboxController.Button.kRightBumper.value);
   JoystickButton subA = new JoystickButton(subStick, XboxController.Button.kA.value);
   JoystickButton subB = new JoystickButton(subStick, XboxController.Button.kB.value);
   JoystickButton subX = new JoystickButton(subStick, XboxController.Button.kX.value);
   JoystickButton subY = new JoystickButton(subStick, XboxController.Button.kY.value);
   JoystickButton subLB = new JoystickButton(subStick, XboxController.Button.kLeftBumper.value);
   JoystickButton subRB = new JoystickButton(subStick, XboxController.Button.kRightBumper.value);
+  JoystickButton subStart = new JoystickButton(subStick, XboxController.Button.kStart.value);
+  JoystickButton subBack = new JoystickButton(subStick, XboxController.Button.kBack.value);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -79,10 +82,6 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    // new JoystickButton(driveStick, Button.kR1.value)
-    //     .whileTrue(new RunCommand(
-    //         () -> m_robotDrive.setX(),
-    //         m_robotDrive));
 
     subA.whileTrue(
       new IntakeInwards(m_intake)
@@ -104,12 +103,24 @@ public class RobotContainer {
       new ReverseShooter(m_shooter)
     );
 
+    subStart.whileTrue(
+      new FlipAmpForward(m_amp)
+    );
+
+    subBack.whileTrue(
+      new FlipAmpBackward(m_amp)
+    );
+
     driveStart.onTrue(
       new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive)
     );
 
     driveLB.whileTrue(
       new LimelightAiming(m_robotDrive, driveStick)
+    );
+
+    driveRB.whileTrue(
+      new ClimbBothDown(m_climber)
     );
   }
 

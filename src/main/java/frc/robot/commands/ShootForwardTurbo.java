@@ -28,8 +28,8 @@ public class ShootForwardTurbo extends Command {
             m_shootersubsystem.setBothShooterMotors(0.9);
         } else {
             m_shootersubsystem.setBothShooterMotors(0.9);
-            m_intakesubsystem.setIndex(0.4);
-            m_intakesubsystem.setIntake(0.15);
+            m_intakesubsystem.setIndex(0.7);
+            m_intakesubsystem.setIntake(0.4);
         }  
     }
 
