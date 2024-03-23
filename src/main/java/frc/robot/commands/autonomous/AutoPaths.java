@@ -19,9 +19,9 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.IntakeInwards;
 import frc.robot.commands.IntakeOutwards;
-import frc.robot.commands.ShootForSpeaker;
-import frc.robot.commands.ShootForwardTurbo;
-import frc.robot.commands.ShootForwardTurbo;
+import frc.robot.commands.ShootManual;
+import frc.robot.commands.ShootAuto;
+import frc.robot.commands.ShootAuto;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -112,10 +112,10 @@ public class AutoPaths extends Command {
 
         return new SequentialCommandGroup(
             goOut1Command,
-            new ShootForSpeaker(m_shooter).withTimeout(0.5).andThen(() -> m_drive.resetOdometry(goOut2.getInitialPose())),
+            new ShootManual(m_shooter).withTimeout(0.5).andThen(() -> m_drive.resetOdometry(goOut2.getInitialPose())),
             new ParallelCommandGroup(
                 new IntakeInwards(m_intake).withTimeout(1),
-                new ShootForSpeaker(m_shooter).withTimeout(1)
+                new ShootManual(m_shooter).withTimeout(1)
             ),
             new WaitCommand(w),
             new ParallelRaceGroup(
@@ -125,10 +125,10 @@ public class AutoPaths extends Command {
             new WaitCommand(w),
             goBackInCommand,           
             new WaitCommand(w),
-            new ShootForSpeaker(m_shooter).withTimeout(0.5),
+            new ShootManual(m_shooter).withTimeout(0.5),
             new ParallelCommandGroup(
                 new IntakeInwards(m_intake).withTimeout(1),
-                new ShootForSpeaker(m_shooter).withTimeout(1)
+                new ShootManual(m_shooter).withTimeout(1)
             )
         );
     }
@@ -181,10 +181,10 @@ public class AutoPaths extends Command {
             new WaitCommand(w),
             goFor3InCommand,
             new WaitCommand(w),
-            new ShootForSpeaker(m_shooter),
+            new ShootManual(m_shooter),
             new ParallelCommandGroup(
                 new IntakeInwards(m_intake).withTimeout(1),
-                new ShootForSpeaker(m_shooter).withTimeout(1)
+                new ShootManual(m_shooter).withTimeout(1)
             )
         );
     }
@@ -237,10 +237,10 @@ public class AutoPaths extends Command {
             new WaitCommand(w),
             goFor3InCommand,
             new WaitCommand(w),
-            new ShootForSpeaker(m_shooter),
+            new ShootManual(m_shooter),
             new ParallelCommandGroup(
                 new IntakeInwards(m_intake).withTimeout(1),
-                new ShootForSpeaker(m_shooter).withTimeout(1)
+                new ShootManual(m_shooter).withTimeout(1)
             )
         );
     }
@@ -286,7 +286,7 @@ public class AutoPaths extends Command {
         m_drive.resetOdometry(goOut.getInitialPose());
 
         return new SequentialCommandGroup(
-            new ShootForwardTurbo(m_shooter, m_intake).withTimeout(1.5),
+            new ShootAuto(m_shooter, m_intake).withTimeout(1.5),
             new WaitCommand(w),
             new ParallelRaceGroup(
                 goOutCommand,
@@ -295,7 +295,7 @@ public class AutoPaths extends Command {
             new WaitCommand(w),
             goBackInCommand,           
             new WaitCommand(w),
-            new ShootForwardTurbo(m_shooter, m_intake).withTimeout(1.5)
+            new ShootAuto(m_shooter, m_intake).withTimeout(1.5)
         );
     }
 
@@ -340,7 +340,7 @@ public class AutoPaths extends Command {
         m_drive.resetOdometry(goOut.getInitialPose());
 
         return new SequentialCommandGroup(
-            new ShootForwardTurbo(m_shooter, m_intake).withTimeout(1.5),
+            new ShootAuto(m_shooter, m_intake).withTimeout(1.5),
             new WaitCommand(w),
             new ParallelRaceGroup(
                 goOutCommand,
@@ -349,7 +349,7 @@ public class AutoPaths extends Command {
             new WaitCommand(w),
             goBackInCommand,           
             new WaitCommand(w),
-            new ShootForwardTurbo(m_shooter, m_intake).withTimeout(1.5)
+            new ShootAuto(m_shooter, m_intake).withTimeout(1.5)
         );
     }
 

@@ -3,10 +3,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class ShootForSpeaker extends Command {
+public class ShootManual extends Command {
     private ShooterSubsystem m_shootersubsystem;
 
-    public ShootForSpeaker(ShooterSubsystem shootersubsystem) {
+    public ShootManual(ShooterSubsystem shootersubsystem) {
         m_shootersubsystem = shootersubsystem;
         addRequirements(shootersubsystem);
     }
@@ -16,7 +16,7 @@ public class ShootForSpeaker extends Command {
 
     @Override
     public void execute() {
-        m_shootersubsystem.setBothShooterMotors(0.7);
+        m_shootersubsystem.setBothShooterMotors(0.9);
     }
 
     @Override

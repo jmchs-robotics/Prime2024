@@ -11,8 +11,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 
 
 /**
@@ -27,7 +30,8 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  private final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive Tab");
+  private static final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive Tab");
+  public static boolean shootAssist = true;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -52,6 +56,12 @@ public class Robot extends TimedRobot {
     driveTab.add("Auto Route", startPosChooser)
       .withSize(2, 1)
       .withPosition(0, 0);
+
+    driveTab.addBoolean("Shooter Assist", 
+      () -> {
+        return shootAssist;
+      }
+    );
 
   }
 
@@ -127,4 +137,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
+
+  public static ShuffleboardTab getDriveTab() {
+    return driveTab;
+  }
 }
