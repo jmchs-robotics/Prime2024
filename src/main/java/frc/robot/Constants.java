@@ -67,6 +67,7 @@ public final class Constants {
 
     public static final boolean kGyroReversed = false;
 
+    // TODO: Tune these PID values
     public static final HolonomicPathFollowerConfig pathConfig = new HolonomicPathFollowerConfig(
       new PIDConstants(0.23, 0, 0),
       new PIDConstants(0.23, 0, 0),

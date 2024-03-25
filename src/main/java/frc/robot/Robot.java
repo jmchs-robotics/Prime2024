@@ -5,14 +5,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 
 /**
@@ -27,7 +24,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  private final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive Tab");
+  // private final ShuffleboardTab driveTab = Shuffleboard.getTab("Drive Tab");
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -48,11 +45,7 @@ public class Robot extends TimedRobot {
 
     m_robotContainer.m_robotDrive.resetEncoders();
 
-    
-    driveTab.add("Auto Route", startPosChooser)
-      .withSize(2, 1)
-      .withPosition(0, 0);
-
+    Shuffleboard.selectTab("Auto Tab");
   }
 
   /**
@@ -69,6 +62,7 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    SmartDashboard.putData(startPosChooser);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

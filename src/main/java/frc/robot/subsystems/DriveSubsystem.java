@@ -21,7 +21,12 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -333,5 +338,25 @@ public class DriveSubsystem extends SubsystemBase {
 
   public Command getAuto(String name) {
     return AutoBuilder.buildAuto(name);
+  }
+
+  public void setUpDriveTab() {
+    ShuffleboardTab driveTab = Shuffleboard.getTab("Drive Tab");
+
+    driveTab.addBoolean("Lined Up",
+      () -> {
+        if (LimelightHelpers.getTV("limelight")) {
+          return LimelightHelpers.getTX("limelight") <= 0.1;
+        } else {
+          return false;
+        }
+      }).withPosition(0, 0)
+      .withSize(2, 2)
+      .withWidget(BuiltInWidgets.kBooleanBox);
+
+    driveTab.addDouble("Match Time Remaining",
+      () -> {return (int) Timer.getMatchTime();})
+      .withPosition(0, 2)
+      .withSize(2, 1);
   }
 }

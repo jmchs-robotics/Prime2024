@@ -9,6 +9,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.Constants.*;
 import frc.robot.commands.*;
 import frc.robot.commands.autonomous.AutoPaths;
@@ -29,11 +30,14 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  */
 public class RobotContainer {
   // The robot's subsystems
-  public final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  public final ClimberSubsystem m_climber = new ClimberSubsystem();
-  public final IntakeSubsystem m_intake = new IntakeSubsystem();
-  public final ShooterSubsystem m_shooter = new ShooterSubsystem();
-  public final AmpSubsystem m_amp = new AmpSubsystem();
+  public static final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  public static final ClimberSubsystem m_climber = new ClimberSubsystem();
+  public static final IntakeSubsystem m_intake = new IntakeSubsystem();
+  public static final ShooterSubsystem m_shooter = new ShooterSubsystem();
+  public static final AmpSubsystem m_amp = new AmpSubsystem();
+  public static final AutoSubsystem m_auto = new AutoSubsystem();
+
+  public static final Field2d field = new Field2d();
 
   // The driver's controller
   XboxController driveStick = new XboxController(OIConstants.kDriverControllerPort);
@@ -70,6 +74,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("Reverse Shooter", new ReverseShooter(m_shooter));
     NamedCommands.registerCommand("Reverse Intake", new IntakeOutwards(m_intake));
     NamedCommands.registerCommand("Limelight Aim", new LimelightAiming(m_robotDrive, driveStick));
+
+    m_robotDrive.setUpDriveTab();
+    m_auto.setUpAutoTab();
   }
 
   /**
