@@ -346,7 +346,7 @@ public class DriveSubsystem extends SubsystemBase {
     driveTab.addBoolean("Lined Up",
       () -> {
         if (LimelightHelpers.getTV("limelight")) {
-          return LimelightHelpers.getTX("limelight") <= 0.1;
+          return Math.abs(LimelightHelpers.getTX("limelight")) <= 0.1;
         } else {
           return false;
         }
