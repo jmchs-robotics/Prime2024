@@ -34,6 +34,7 @@ public class AutoSubsystem extends SubsystemBase {
 
     private ArrayList<PathPlannerTrajectory> trajectories = new ArrayList<PathPlannerTrajectory>();
     private Command autoCommand = Commands.runOnce(() -> {});
+    private String feedback = "Enter Auto Path Sequence";
 
     GenericEntry autoEntry;
 
@@ -59,6 +60,7 @@ public class AutoSubsystem extends SubsystemBase {
 
         autoTab.add("Auto Path Sequence", "").withSize(3, 1).withPosition(0, 0);
         autoTab.add(RobotContainer.field).withSize(6, 4).withPosition(3, 0);
+        autoTab.addString("Feedback", () -> feedback).withSize(3, 1).withPosition(0, 1);
 
         NetworkTable ntTable = NetworkTableInstance.getDefault().getTable("Shuffleboard").getSubTable("Auto Tab");
 
@@ -69,6 +71,14 @@ public class AutoSubsystem extends SubsystemBase {
                 validateAndCreatePaths();
             }
         );
+    }
+
+    public void setFeedback(String val) {
+        feedback = val;
+    }
+
+    public String getFeedback() {
+        return feedback;
     }
 
     public void drawPaths() {
@@ -160,14 +170,16 @@ public class AutoSubsystem extends SubsystemBase {
                     segment = new ParallelRaceGroup(cmd);
                 }
             } catch (Exception e) {
-                // Couldn't find path file
+                setFeedback("Couldn't Find Path File");
                 autoCommand = Commands.runOnce(() -> {});
             }
 
             finalPath.addCommands(segment);
+            //TODO: Put necessary conditions and commands here eventually
         }
 
         autoCommand = finalPath;
+        setFeedback("Created Path Sequence");
     }
     
 }

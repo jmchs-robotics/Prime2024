@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.Constants.*;
 import frc.robot.commands.*;
-import frc.robot.commands.autonomous.AutoPaths;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -137,27 +136,10 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand(String a) {
-    
-    AutoPaths p = new AutoPaths(m_robotDrive, m_shooter, m_intake, m_climber);
 
     Command autoCommand = null;
 
     switch(a) {
-      case "c2":
-        autoCommand = p.center2NoteBase();
-        break;
-      case "ra3bs3":
-        autoCommand = p.red3NoteAmp_blue3NoteSource();
-        break;
-      case "rs3ba3":
-        autoCommand = p.red3NoteSource_blue3NoteAmp();
-        break;
-      case "ra2bs2":
-        autoCommand = p.red2NoteAmp_blue2NoteSource();
-        break;
-      case "rs2ba2":
-        autoCommand = p.red2NoteSource_blue2NoteAmp();
-        break;
       case "topSide":
         autoCommand = m_robotDrive.getAuto("TopSideAuto");
         break;
