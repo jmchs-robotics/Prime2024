@@ -144,8 +144,9 @@ public class AutoSubsystem extends SubsystemBase {
 
         trajectories.clear();
 
-        if (autoString.length() == 0) {
+        if (autoString.length() <= 1) {
             autoCommand = new ShootForwardTurbo(m_shooterSubsystem, m_intakeSubsystem).withTimeout(1.5);
+            setFeedback("Default Path (Shoot and Sit)");
             return;
         }
 
@@ -172,6 +173,7 @@ public class AutoSubsystem extends SubsystemBase {
             } catch (Exception e) {
                 setFeedback("Couldn't Find Path File");
                 autoCommand = Commands.runOnce(() -> {});
+                return;
             }
 
             finalPath.addCommands(segment);
