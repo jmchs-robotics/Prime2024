@@ -135,33 +135,35 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand(String a) {
+  public Command getAutonomousCommand() {
 
-    Command autoCommand = null;
+    return m_auto.getAutoCommand();
 
-    switch(a) {
-      case "topSide":
-        autoCommand = m_robotDrive.getAuto("TopSideAuto");
-        break;
-      case "bottomSide":
-        autoCommand = m_robotDrive.getAuto("BottomSideAuto");
-        break;
-      case "centerSide":
-        autoCommand = m_robotDrive.getAuto("CenterSideAuto");
-        break;
-      case "centerSide3Bottom":
-        autoCommand = new SequentialCommandGroup(
-          m_robotDrive.getAuto("CenterSideAuto"),
-          m_robotDrive.getAuto("CenterSideAuto3NoteBottom"),
-          new WaitCommand(0.25),
-          new InstantCommand(m_shooter::stopBothShooterMotors),
-          new InstantCommand(m_intake::stopIntake),
-          new InstantCommand(m_intake::stopIndex),
-          new RunCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive)
-        );
-        break;
-    }
+    // Command autoCommand = null;
 
-    return autoCommand;
+    // switch(a) {
+    //   case "topSide":
+    //     autoCommand = m_robotDrive.getAuto("TopSideAuto");
+    //     break;
+    //   case "bottomSide":
+    //     autoCommand = m_robotDrive.getAuto("BottomSideAuto");
+    //     break;
+    //   case "centerSide":
+    //     autoCommand = m_robotDrive.getAuto("CenterSideAuto");
+    //     break;
+    //   case "centerSide3Bottom":
+    //     autoCommand = new SequentialCommandGroup(
+    //       m_robotDrive.getAuto("CenterSideAuto"),
+    //       m_robotDrive.getAuto("CenterSideAuto3NoteBottom"),
+    //       new WaitCommand(0.25),
+    //       new InstantCommand(m_shooter::stopBothShooterMotors),
+    //       new InstantCommand(m_intake::stopIntake),
+    //       new InstantCommand(m_intake::stopIndex),
+    //       new RunCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive)
+    //     );
+    //     break;
+    // }
+
+    // return autoCommand;
   }
 }

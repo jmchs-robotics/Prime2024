@@ -78,7 +78,7 @@ public class Robot extends TimedRobot {
 
     String startPos = startPosChooser.getSelected();
 
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand(startPos);
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",

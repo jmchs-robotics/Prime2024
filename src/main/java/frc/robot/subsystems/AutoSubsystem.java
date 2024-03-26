@@ -55,6 +55,10 @@ public class AutoSubsystem extends SubsystemBase {
         validateAndCreatePaths();
     }
 
+    public Command getAutoCommand() {
+        return autoCommand;
+    }
+
     public void setUpAutoTab() {
         ShuffleboardTab autoTab = Shuffleboard.getTab("Auto Tab");
 
