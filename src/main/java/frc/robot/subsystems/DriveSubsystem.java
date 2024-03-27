@@ -345,11 +345,9 @@ public class DriveSubsystem extends SubsystemBase {
 
     driveTab.addBoolean("Lined Up",
       () -> {
-        if (LimelightHelpers.getTV("limelight")) {
-          return Math.abs(LimelightHelpers.getTX("limelight")) <= 0.1;
-        } else {
-          return false;
-        }
+        return LimelightHelpers.getTV("limelight")
+          ? Math.abs(LimelightHelpers.getTX("limelight")) <= 0.1
+          : false;
       }).withPosition(0, 0)
       .withSize(2, 2)
       .withWidget(BuiltInWidgets.kBooleanBox);
