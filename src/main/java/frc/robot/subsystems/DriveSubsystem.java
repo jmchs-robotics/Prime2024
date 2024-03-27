@@ -356,5 +356,9 @@ public class DriveSubsystem extends SubsystemBase {
       () -> {return (int) Timer.getMatchTime();})
       .withPosition(0, 2)
       .withSize(2, 1);
+
+    driveTab.addCamera("Limelight", "limelight", "mjpeg:http://10.59.33.14:5801")
+      .withPosition(3, 0)
+      .withSize(6, 4);  
   }
 }
