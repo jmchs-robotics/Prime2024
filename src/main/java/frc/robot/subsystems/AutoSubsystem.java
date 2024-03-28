@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
+import frc.robot.commands.IntakeInwards;
 import frc.robot.commands.ShootForwardTurbo;
 
 public class AutoSubsystem extends SubsystemBase {
@@ -40,6 +41,9 @@ public class AutoSubsystem extends SubsystemBase {
 
     private ShooterSubsystem m_shooterSubsystem;
     private IntakeSubsystem m_intakeSubsystem;
+
+    private char[] NOTE_SPOTS = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
+    private char[] SHOOT_SPOTS = {'1', 'X', '3'};
 
     public AutoSubsystem(ShooterSubsystem shooter, IntakeSubsystem intake) {
 
@@ -154,7 +158,10 @@ public class AutoSubsystem extends SubsystemBase {
             return;
         }
 
-        // TODO: Put intial Commands here eventually
+        // TODO: Put this back in once we do PID tuning
+        // if (autoString.charAt(0) == '1' || autoString.charAt(0) == '3') {
+        //     finalPath.addCommands(new ShootForwardTurbo(m_shooterSubsystem, m_intakeSubsystem).withTimeout(1.5));
+        // }
 
         ParallelRaceGroup segment = new ParallelRaceGroup();
         for (int i = 0; i < autoString.length() - 1; i++) {
@@ -180,12 +187,30 @@ public class AutoSubsystem extends SubsystemBase {
                 return;
             }
 
+            // TODO: Put back in once PID tuning is done
+            // if (indexOfAutoChar(NOTE_SPOTS, nextPoint) != -1) {
+            //     segment.addCommands(new IntakeInwards(m_intakeSubsystem));
+            // }            
+
             finalPath.addCommands(segment);
-            //TODO: Put necessary conditions and commands here eventually
+
+            // TODO: Put back in once PID tuning is done
+            // if (indexOfAutoChar(SHOOT_SPOTS, nextPoint) != -1) {
+            //     finalPath.addCommands(new ShootForwardTurbo(m_shooterSubsystem, m_intakeSubsystem).withTimeout(i));
+            // }
         }
 
         autoCommand = finalPath;
         setFeedback("Created Path Sequence");
+    }
+
+    public int indexOfAutoChar(char[] arr, char val) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == val) {
+                return i;
+            }
+        }
+        return -1;
     }
     
 }
