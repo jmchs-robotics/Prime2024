@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3482831698487834,
-        "y": 6.6321923992448495
+        "x": 5.058307756623941,
+        "y": 5.54
       },
       "isLocked": false,
       "linkedName": "Point X"
     },
     {
       "anchor": {
-        "x": 2.72,
-        "y": 6.98
+        "x": 8.1,
+        "y": 7.45
       },
       "prevControl": {
-        "x": 1.3649108847481282,
-        "y": 6.98
+        "x": 5.879999999999999,
+        "y": 7.45
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Point A"
+      "linkedName": "Point D"
     }
   ],
   "rotationTargets": [],
