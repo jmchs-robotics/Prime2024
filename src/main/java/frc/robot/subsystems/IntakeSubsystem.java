@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
@@ -14,6 +15,8 @@ public class IntakeSubsystem extends SubsystemBase {
     private final TalonFX rightIntakeMotor;
     private final TalonFX leftIntakeMotor;
     private final TalonFX indexMotor;
+
+    private final DigitalInput beamBreak;
 
     // private final CANSparkMax indexMotor;
 
@@ -33,6 +36,8 @@ public class IntakeSubsystem extends SubsystemBase {
         indexMotor.setInverted(true);
 
         // indexMotor.burnFlash();
+
+        beamBreak = new DigitalInput(IntakeConstants.beamBreakPort);
     }
 
     @Override
@@ -57,5 +62,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void stopIndex() {
         indexMotor.stopMotor();
+    }
+
+    public boolean isBeamBreakTripped() {
+        return !beamBreak.get();
     }
 }

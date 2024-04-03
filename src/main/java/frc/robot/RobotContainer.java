@@ -4,11 +4,19 @@
 
 package frc.robot;
 
+import java.util.Map;
+
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.Constants.*;
 import frc.robot.commands.*;
@@ -55,6 +63,9 @@ public class RobotContainer {
   JoystickButton subStart = new JoystickButton(subStick, XboxController.Button.kStart.value);
   JoystickButton subBack = new JoystickButton(subStick, XboxController.Button.kBack.value);
 
+  UsbCamera camera = CameraServer.startAutomaticCapture("Intake Camera", 0);
+
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -74,7 +85,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Reverse Intake", new IntakeOutwards(m_intake));
     NamedCommands.registerCommand("Limelight Aim", new LimelightAiming(m_robotDrive, driveStick));
 
-    m_robotDrive.setUpDriveTab();
+    setUpDriveTab();
     m_auto.setUpAutoTab();
   }
 
@@ -165,5 +176,42 @@ public class RobotContainer {
     // }
 
     // return autoCommand;
+  }
+
+  public void setUpDriveTab() {
+    ShuffleboardTab driveTab = Shuffleboard.getTab("Drive Tab");
+
+    driveTab.addBoolean("Robot Ate Note",
+      () -> {
+        return m_intake.isBeamBreakTripped();
+      }).withPosition(0, 0)
+      .withSize(2, 2)
+      .withWidget(BuiltInWidgets.kBooleanBox);
+
+    // driveTab.addBoolean("Left Climber Down",
+    //   () -> {
+    //     return m_climber.isLeftClimberSwitchPressed();
+    //   }).withPosition(0, 2)
+    //   .withSize(1, 1)
+    //   .withWidget(BuiltInWidgets.kBooleanBox);
+
+    // driveTab.addBoolean("Right Climber Down",
+    //   () -> {
+    //     return m_climber.isRightClimberSwitchPressed();
+    //   }).withPosition(1, 2)
+    //   .withSize(1, 1)
+    //   .withWidget(BuiltInWidgets.kBooleanBox);
+
+    driveTab.addDouble("Match Time Remaining",
+      () -> {return (int) Timer.getMatchTime();})
+      .withPosition(0, 3)
+      .withSize(2, 2)
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", 0, "max", 135));
+
+    driveTab.add(camera)
+      .withPosition(2, 0)
+      .withSize(7, 5)
+      .withWidget(BuiltInWidgets.kCameraStream);
   }
 }

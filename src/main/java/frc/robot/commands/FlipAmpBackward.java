@@ -22,7 +22,7 @@ public class FlipAmpBackward extends Command {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return false; //m_ampSubsystem.isAmpSwitchPressed();
     }
 
     @Override

@@ -168,15 +168,19 @@ public final class Constants {
     public static final int rightIntakeID = 3;
     public static final int leftIntakeID = 4;
     public static final int indexID = 7;
+    public static final int beamBreakPort = 0;
   }
 
   public static final class ClimberConstants {
     public static final int rightClimberID = 5;
     public static final int leftClimberID = 6;
+    public static final int leftClimberSwitchPort = 2;
+    public static final int rightClimberSwitchPort = 3;
   }
 
   public static final class AmpConstants {
     public static final int ampMotorID = 8;
+    public static final int ampSwitchPort = 4;
   }
   
 }

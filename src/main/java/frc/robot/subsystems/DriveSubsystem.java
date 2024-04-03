@@ -88,8 +88,6 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
       });
 
-  UsbCamera camera = CameraServer.startAutomaticCapture("Intake Camera", 0);
-
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     configPathPlanner();
@@ -345,30 +343,5 @@ public class DriveSubsystem extends SubsystemBase {
 
   public Command getAuto(String name) {
     return AutoBuilder.buildAuto(name);
-  }
-
-  public void setUpDriveTab() {
-    ShuffleboardTab driveTab = Shuffleboard.getTab("Drive Tab");
-
-    driveTab.addBoolean("Lined Up",
-      () -> {
-        return LimelightHelpers.getTV("limelight")
-          ? Math.abs(LimelightHelpers.getTX("limelight")) <= 0.1
-          : false;
-      }).withPosition(0, 0)
-      .withSize(2, 2)
-      .withWidget(BuiltInWidgets.kBooleanBox);
-
-    driveTab.addDouble("Match Time Remaining",
-      () -> {return (int) Timer.getMatchTime();})
-      .withPosition(0, 2)
-      .withSize(2, 2)
-      .withWidget(BuiltInWidgets.kDial)
-      .withProperties(Map.of("min", 0, "max", 135));
-
-    driveTab.add(camera)
-      .withPosition(2, 0)
-      .withSize(7, 5)
-      .withWidget(BuiltInWidgets.kCameraStream);
   }
 }

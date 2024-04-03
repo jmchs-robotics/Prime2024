@@ -22,7 +22,7 @@ public class IntakeInwards extends Command {
 
     @Override
     public boolean isFinished () {
-        return false;
+        return m_intakesubsystem.isBeamBreakTripped();
     }
 
     @Override
