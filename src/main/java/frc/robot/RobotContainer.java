@@ -34,7 +34,7 @@ public class RobotContainer {
   public static final IntakeSubsystem m_intake = new IntakeSubsystem();
   public static final ShooterSubsystem m_shooter = new ShooterSubsystem();
   public static final AmpSubsystem m_amp = new AmpSubsystem();
-  public static final AutoSubsystem m_auto = new AutoSubsystem(m_shooter, m_intake);
+  public static final AutoSubsystem m_auto = new AutoSubsystem(m_shooter, m_intake, m_robotDrive);
 
   public static final Field2d field = new Field2d();
 
@@ -125,9 +125,9 @@ public class RobotContainer {
       new LimelightAiming(m_robotDrive, driveStick)
     );
 
-    driveRB.whileTrue(
-      new ClimbBothDown(m_climber)
-    );
+    // driveRB.whileTrue(
+    //   new ClimbBothDown(m_climber)
+    // );
   }
 
   /**

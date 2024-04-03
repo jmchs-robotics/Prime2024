@@ -13,24 +13,26 @@ import frc.robot.Constants.IntakeConstants;
 public class IntakeSubsystem extends SubsystemBase {
     private final TalonFX rightIntakeMotor;
     private final TalonFX leftIntakeMotor;
-    // private final TalonFX indexMotor;
+    private final TalonFX indexMotor;
 
-    private final CANSparkMax indexMotor;
+    // private final CANSparkMax indexMotor;
 
     public IntakeSubsystem() {
         rightIntakeMotor = new TalonFX(IntakeConstants.rightIntakeID);
         leftIntakeMotor = new TalonFX(IntakeConstants.leftIntakeID);
-        indexMotor = new CANSparkMax(IntakeConstants.indexID, MotorType.kBrushless);
+        indexMotor = new TalonFX(IntakeConstants.indexID);
+        // indexMotor = new CANSparkMax(IntakeConstants.indexID, MotorType.kBrushless);
 
         rightIntakeMotor.setNeutralMode(NeutralModeValue.Coast);
         leftIntakeMotor.setNeutralMode(NeutralModeValue.Coast);
-        indexMotor.setIdleMode(IdleMode.kCoast);
+        indexMotor.setNeutralMode(NeutralModeValue.Coast);
+        // indexMotor.setIdleMode(IdleMode.kCoast);
 
         rightIntakeMotor.setInverted(false);
         leftIntakeMotor.setInverted(false);
         indexMotor.setInverted(true);
 
-        indexMotor.burnFlash();
+        // indexMotor.burnFlash();
     }
 
     @Override

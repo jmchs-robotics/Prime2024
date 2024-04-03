@@ -13,7 +13,8 @@ import frc.robot.Constants.ShooterConstants;
 public class ShooterSubsystem extends SubsystemBase {
     // private final TalonFX rightShooterMotor;
     private final CANSparkFlex rightShooterMotor;
-    private final TalonFX leftShooterMotor;
+    // private final TalonFX leftShooterMotor;
+    private final CANSparkFlex leftShooterMotor;
 
     public ShooterSubsystem() {
         // rightShooterMotor = new TalonFX(ShooterConstants.rightShooterID);
@@ -23,17 +24,23 @@ public class ShooterSubsystem extends SubsystemBase {
         rightShooterMotor = new CANSparkFlex(ShooterConstants.rightShooterID, MotorType.kBrushless);
         rightShooterMotor.setInverted(true);
 
-        leftShooterMotor = new TalonFX(ShooterConstants.leftShooterID);
-        addChild("leftShooterTalon", leftShooterMotor);
+        // leftShooterMotor = new TalonFX(ShooterConstants.leftShooterID);
+        // addChild("leftShooterTalon", leftShooterMotor);
+        // leftShooterMotor.setInverted(false);
+
+        leftShooterMotor = new CANSparkFlex(ShooterConstants.leftShooterID, MotorType.kBrushless);
         leftShooterMotor.setInverted(false);
 
         // rightShooterMotor.setNeutralMode(NeutralModeValue.Brake);
         rightShooterMotor.setIdleMode(IdleMode.kCoast);
-        leftShooterMotor.setNeutralMode(NeutralModeValue.Coast);
+        // leftShooterMotor.setNeutralMode(NeutralModeValue.Coast);
+        leftShooterMotor.setIdleMode(IdleMode.kCoast);
 
         rightShooterMotor.setOpenLoopRampRate(1);
+        leftShooterMotor.setOpenLoopRampRate(1);
 
         rightShooterMotor.burnFlash();
+        leftShooterMotor.burnFlash();
     }
 
     @Override

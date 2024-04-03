@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -15,6 +17,9 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.WPIUtilJNI;
+
+import java.util.Map;
+
 // import edu.wpi.first.wpilibj.ADIS16470_IMU;
 // import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import com.kauailabs.navx.frc.AHRS;
@@ -82,6 +87,8 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
       });
+
+  UsbCamera camera = CameraServer.startAutomaticCapture("Intake Camera", 0);
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -355,10 +362,13 @@ public class DriveSubsystem extends SubsystemBase {
     driveTab.addDouble("Match Time Remaining",
       () -> {return (int) Timer.getMatchTime();})
       .withPosition(0, 2)
-      .withSize(2, 1);
+      .withSize(2, 2)
+      .withWidget(BuiltInWidgets.kDial)
+      .withProperties(Map.of("min", 0, "max", 135));
 
-    driveTab.addCamera("Limelight", "limelight", "mjpeg:http://10.59.33.14:5801")
-      .withPosition(3, 0)
-      .withSize(6, 4);  
+    driveTab.add(camera)
+      .withPosition(2, 0)
+      .withSize(7, 5)
+      .withWidget(BuiltInWidgets.kCameraStream);
   }
 }

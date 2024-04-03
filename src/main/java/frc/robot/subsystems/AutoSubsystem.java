@@ -9,6 +9,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.PathPlannerTrajectory;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.Trajectory.State;
@@ -41,25 +42,28 @@ public class AutoSubsystem extends SubsystemBase {
 
     private ShooterSubsystem m_shooterSubsystem;
     private IntakeSubsystem m_intakeSubsystem;
+    private DriveSubsystem m_driveSubsystem;
 
     private char[] NOTE_SPOTS = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'};
     private char[] SHOOT_SPOTS = {'1', 'X', '3'};
 
-    public AutoSubsystem(ShooterSubsystem shooter, IntakeSubsystem intake) {
+    public AutoSubsystem(ShooterSubsystem shooter, IntakeSubsystem intake, DriveSubsystem drive) {
 
         NetworkTable table = NetworkTableInstance.getDefault().getTable("Shuffleboard").getSubTable("Auto Tab");
         autoEntry = table.getTopic("Auto Path Sequence").getGenericEntry();
 
         m_shooterSubsystem = shooter;
         m_intakeSubsystem = intake;
+        m_driveSubsystem = drive;
     }
 
     @Override
     public void periodic() {
-        validateAndCreatePaths();
+        // validateAndCreatePaths();
     }
 
     public Command getAutoCommand() {
+        validateAndCreatePaths();
         return autoCommand;
     }
 
@@ -142,11 +146,11 @@ public class AutoSubsystem extends SubsystemBase {
     public void validateAndCreatePaths() {
         String autoString = autoEntry.getString("");
 
-        builPathSequenceOdometry(autoString);
+        buildPathSequenceOdometry(autoString);
         drawPaths();
     }
 
-    public void builPathSequenceOdometry(String autoString) {
+    public void buildPathSequenceOdometry(String autoString) {
 
         SequentialCommandGroup finalPath = new SequentialCommandGroup();
 
@@ -159,9 +163,27 @@ public class AutoSubsystem extends SubsystemBase {
         }
 
         // TODO: Put this back in once we do PID tuning
-        // if (autoString.charAt(0) == '1' || autoString.charAt(0) == '3') {
-        //     finalPath.addCommands(new ShootForwardTurbo(m_shooterSubsystem, m_intakeSubsystem).withTimeout(1.5));
-        // }
+        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) {
+            if (autoString.charAt(0) == '1') {
+                m_driveSubsystem.resetOdometry(new Pose2d(16.54175-0.97, 6.92, Rotation2d.fromDegrees(-60)));
+                finalPath.addCommands(new ShootForwardTurbo(m_shooterSubsystem, m_intakeSubsystem).withTimeout(1.5));
+            } else if (autoString.charAt(0) == '2') {
+                m_driveSubsystem.resetOdometry(new Pose2d(16.54175-1.36, 5.54, Rotation2d.fromDegrees(0)));
+            } else if (autoString.charAt(0) == '3') {
+                m_driveSubsystem.resetOdometry(new Pose2d(16.54175-0.97, 4.13, Rotation2d.fromDegrees(60)));
+                finalPath.addCommands(new ShootForwardTurbo(m_shooterSubsystem, m_intakeSubsystem).withTimeout(1.5));
+            }
+        } else {
+            if (autoString.charAt(0) == '1') {
+                m_driveSubsystem.resetOdometry(new Pose2d(0.97, 6.92, Rotation2d.fromDegrees(-120)));
+                finalPath.addCommands(new ShootForwardTurbo(m_shooterSubsystem, m_intakeSubsystem).withTimeout(1.5));
+            } else if (autoString.charAt(0) == '2') {
+                m_driveSubsystem.resetOdometry(new Pose2d(1.36, 5.54, Rotation2d.fromDegrees(180)));
+            } else if (autoString.charAt(0) == '3') {
+                m_driveSubsystem.resetOdometry(new Pose2d(0.97, 4.13, Rotation2d.fromDegrees(120)));
+                finalPath.addCommands(new ShootForwardTurbo(m_shooterSubsystem, m_intakeSubsystem).withTimeout(1.5));
+            }
+        }        
 
         ParallelRaceGroup segment = new ParallelRaceGroup();
         for (int i = 0; i < autoString.length() - 1; i++) {
@@ -188,16 +210,16 @@ public class AutoSubsystem extends SubsystemBase {
             }
 
             // TODO: Put back in once PID tuning is done
-            // if (indexOfAutoChar(NOTE_SPOTS, nextPoint) != -1) {
-            //     segment.addCommands(new IntakeInwards(m_intakeSubsystem));
-            // }            
+            if (indexOfAutoChar(NOTE_SPOTS, nextPoint) != -1) {
+                segment.addCommands(new IntakeInwards(m_intakeSubsystem));
+            }            
 
             finalPath.addCommands(segment);
 
             // TODO: Put back in once PID tuning is done
-            // if (indexOfAutoChar(SHOOT_SPOTS, nextPoint) != -1) {
-            //     finalPath.addCommands(new ShootForwardTurbo(m_shooterSubsystem, m_intakeSubsystem).withTimeout(i));
-            // }
+            if (indexOfAutoChar(SHOOT_SPOTS, nextPoint) != -1) {
+                finalPath.addCommands(new ShootForwardTurbo(m_shooterSubsystem, m_intakeSubsystem).withTimeout(1.5));
+            }
         }
 
         autoCommand = finalPath;
