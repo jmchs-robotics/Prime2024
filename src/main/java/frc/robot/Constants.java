@@ -69,8 +69,8 @@ public final class Constants {
 
     // TODO: Tune these PID values
     public static final HolonomicPathFollowerConfig pathConfig = new HolonomicPathFollowerConfig(
-      new PIDConstants(1.22, 0.5, 0.12),
-      new PIDConstants(0.2, 0.1, 0.1),
+      new PIDConstants(1.7, 0, 0.15),
+      new PIDConstants(1.7, 0, 0.15),
       5,
       Units.inchesToMeters(18.03),
       new ReplanningConfig()

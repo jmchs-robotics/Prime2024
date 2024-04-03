@@ -4,23 +4,23 @@
     {
       "anchor": {
         "x": 2.72,
-        "y": 6.98
+        "y": 7.03
       },
       "prevControl": null,
       "nextControl": {
         "x": 1.61,
-        "y": 6.98
+        "y": 7.03
       },
       "isLocked": false,
       "linkedName": "Point A"
     },
     {
       "anchor": {
-        "x": 0.97,
+        "x": 1.03,
         "y": 6.92
       },
       "prevControl": {
-        "x": 1.607564606778717,
+        "x": 1.667564606778717,
         "y": 6.975779675358502
       },
       "nextControl": null,
@@ -28,12 +28,18 @@
       "linkedName": "Point 1"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.4,
+      "rotationDegrees": -150.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 4.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
