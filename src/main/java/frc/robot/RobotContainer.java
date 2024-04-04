@@ -113,7 +113,7 @@ public class RobotContainer {
     );
 
     subRB.and(subX).whileTrue(
-      new ShootForAmp(m_shooter)
+      new ShootForAmp(m_shooter, m_intake)
     );
 
     subY.whileTrue(
@@ -195,12 +195,12 @@ public class RobotContainer {
     //   .withSize(1, 1)
     //   .withWidget(BuiltInWidgets.kBooleanBox);
 
-    // driveTab.addBoolean("Right Climber Down",
-    //   () -> {
-    //     return m_climber.isRightClimberSwitchPressed();
-    //   }).withPosition(1, 2)
-    //   .withSize(1, 1)
-    //   .withWidget(BuiltInWidgets.kBooleanBox);
+    driveTab.addBoolean("Right Climber Down",
+      () -> {
+        return m_climber.isRightClimberSwitchPressed();
+      }).withPosition(1, 2)
+      .withSize(1, 1)
+      .withWidget(BuiltInWidgets.kBooleanBox);
 
     driveTab.addDouble("Match Time Remaining",
       () -> {return (int) Timer.getMatchTime();})

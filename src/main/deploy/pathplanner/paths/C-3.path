@@ -8,7 +8,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7200000000000002,
+        "x": 1.61,
         "y": 4.09
       },
       "isLocked": false,
@@ -20,19 +20,25 @@
         "y": 4.13
       },
       "prevControl": {
-        "x": 1.9661946980917457,
-        "y": 4.042844257252341
+        "x": 1.607564606778717,
+        "y": 4.074220324641498
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Point 3"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.4,
+      "rotationDegrees": 150.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 2.0,
     "maxAcceleration": 4.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
@@ -48,5 +54,5 @@
     "rotation": 180.0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.6071452465886464,
-        "y": 4.074257013904064
+        "x": 1.8670853547566058,
+        "y": 3.623899351629328
       },
       "isLocked": false,
       "linkedName": "Point 3"
@@ -20,8 +20,8 @@
         "y": 4.09
       },
       "prevControl": {
-        "x": 1.6107151417348569,
-        "y": 4.09
+        "x": 1.9011237815012498,
+        "y": 4.047084515880785
       },
       "nextControl": null,
       "isLocked": false,

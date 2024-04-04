@@ -41,6 +41,8 @@ public class ShootForwardTurbo extends Command {
     @Override
     public void end(boolean interrupted) {
         m_shootersubsystem.stopBothShooterMotors();
+        m_intakesubsystem.stopIndex();
+        m_intakesubsystem.stopIntake();
     }
 
     @Override
