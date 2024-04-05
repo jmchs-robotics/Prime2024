@@ -136,9 +136,9 @@ public class RobotContainer {
       new LimelightAiming(m_robotDrive, driveStick)
     );
 
-    // driveRB.whileTrue(
-    //   new ClimbBothDown(m_climber)
-    // );
+    driveRB.whileTrue(
+      new ClimbBothDown(m_climber)
+    );
   }
 
   /**
@@ -150,32 +150,6 @@ public class RobotContainer {
 
     return m_auto.getAutoCommand();
 
-    // Command autoCommand = null;
-
-    // switch(a) {
-    //   case "topSide":
-    //     autoCommand = m_robotDrive.getAuto("TopSideAuto");
-    //     break;
-    //   case "bottomSide":
-    //     autoCommand = m_robotDrive.getAuto("BottomSideAuto");
-    //     break;
-    //   case "centerSide":
-    //     autoCommand = m_robotDrive.getAuto("CenterSideAuto");
-    //     break;
-    //   case "centerSide3Bottom":
-    //     autoCommand = new SequentialCommandGroup(
-    //       m_robotDrive.getAuto("CenterSideAuto"),
-    //       m_robotDrive.getAuto("CenterSideAuto3NoteBottom"),
-    //       new WaitCommand(0.25),
-    //       new InstantCommand(m_shooter::stopBothShooterMotors),
-    //       new InstantCommand(m_intake::stopIntake),
-    //       new InstantCommand(m_intake::stopIndex),
-    //       new RunCommand(() -> m_robotDrive.drive(0, 0, 0, false, false), m_robotDrive)
-    //     );
-    //     break;
-    // }
-
-    // return autoCommand;
   }
 
   public void setUpDriveTab() {
@@ -188,12 +162,12 @@ public class RobotContainer {
       .withSize(2, 2)
       .withWidget(BuiltInWidgets.kBooleanBox);
 
-    // driveTab.addBoolean("Left Climber Down",
-    //   () -> {
-    //     return m_climber.isLeftClimberSwitchPressed();
-    //   }).withPosition(0, 2)
-    //   .withSize(1, 1)
-    //   .withWidget(BuiltInWidgets.kBooleanBox);
+    driveTab.addBoolean("Left Climber Down",
+      () -> {
+        return m_climber.isLeftClimberSwitchPressed();
+      }).withPosition(0, 2)
+      .withSize(1, 1)
+      .withWidget(BuiltInWidgets.kBooleanBox);
 
     driveTab.addBoolean("Right Climber Down",
       () -> {

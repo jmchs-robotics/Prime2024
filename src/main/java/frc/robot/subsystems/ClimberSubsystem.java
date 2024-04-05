@@ -10,14 +10,14 @@ public class ClimberSubsystem extends SubsystemBase {
     private final TalonFX leftClimberMotor;
 
     private final DigitalInput rightClimberSwitch;
-    // private final DigitalInput leftClimberSwitch;
+    private final DigitalInput leftClimberSwitch;
 
     public ClimberSubsystem() {
         rightClimberMotor = new TalonFX(ClimberConstants.rightClimberID);
         leftClimberMotor = new TalonFX(ClimberConstants.leftClimberID);
 
         rightClimberSwitch = new DigitalInput(ClimberConstants.rightClimberSwitchPort);
-        // leftClimberSwitch = new DigitalInput(ClimberConstants.leftClimberSwitchPort);
+        leftClimberSwitch = new DigitalInput(ClimberConstants.leftClimberSwitchPort);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ClimberSubsystem extends SubsystemBase {
         return !rightClimberSwitch.get();
     }
 
-    // public boolean isLeftClimberSwitchPressed() {
-    //     return leftClimberSwitch.get();
-    // }
+    public boolean isLeftClimberSwitchPressed() {
+        return !leftClimberSwitch.get();
+    }
 }

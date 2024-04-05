@@ -19,19 +19,21 @@ public class ClimbBothDown extends Command {
 
     @Override
     public void execute() {
-        // if (!m_climbersubsystem.isLeftClimberSwitchPressed()) {
-        //     m_climbersubsystem.spinLeftMotor(0.75);
-        // }
-        // if (!m_climbersubsystem.isRightClimberSwitchPressed()) {
-        //     m_climbersubsystem.spinRightMotor(0.75);
-        // }
-        
-        m_climbersubsystem.spinBothMotors(0.75);
+        if (!m_climbersubsystem.isLeftClimberSwitchPressed()) {
+            m_climbersubsystem.spinLeftMotor(0.75);
+        } else {
+            m_climbersubsystem.stopLeftMotor();
+        }
+        if (!m_climbersubsystem.isRightClimberSwitchPressed()) {
+            m_climbersubsystem.spinRightMotor(0.75);
+        } else {
+            m_climbersubsystem.stopRightMotor();
+        }
     }
 
     @Override
     public boolean isFinished() {
-        return false; //(m_climbersubsystem.isLeftClimberSwitchPressed() && m_climbersubsystem.isRightClimberSwitchPressed());
+        return (m_climbersubsystem.isLeftClimberSwitchPressed() && m_climbersubsystem.isRightClimberSwitchPressed());
     }
 
     @Override

@@ -21,7 +21,7 @@ public class DefaultClimberCommand extends Command {
 
     @Override
     public void execute() {
-        // double leftVal = MathUtil.applyDeadband(m_controller.getLeftY() * 0.75, OIConstants.kDriveDeadband);
+        double leftVal = MathUtil.applyDeadband(m_controller.getLeftY() * 0.75, OIConstants.kDriveDeadband);
         double rightVal = MathUtil.applyDeadband(m_controller.getRightY() * 0.75, OIConstants.kDriveDeadband);
 
         /* if the switch isn't pressed, climb freely
@@ -29,13 +29,13 @@ public class DefaultClimberCommand extends Command {
          * else (meaning switch is pressed and you are still trying to go down), don't
          */
 
-        // if (!m_climbersubsystem.isLeftClimberSwitchPressed()) {
-        //     m_climbersubsystem.spinLeftMotor(leftVal);
-        // } else if (m_climbersubsystem.isLeftClimberSwitchPressed() && leftVal < 0) {
-        //     m_climbersubsystem.spinLeftMotor(leftVal);
-        // } else {
-        //     m_climbersubsystem.stopLeftMotor();
-        // }
+        if (!m_climbersubsystem.isLeftClimberSwitchPressed()) {
+            m_climbersubsystem.spinLeftMotor(leftVal);
+        } else if (m_climbersubsystem.isLeftClimberSwitchPressed() && leftVal < 0) {
+            m_climbersubsystem.spinLeftMotor(leftVal);
+        } else if (m_climbersubsystem.isLeftClimberSwitchPressed() && leftVal > 0){
+            m_climbersubsystem.stopLeftMotor();
+        }
 
         if (!m_climbersubsystem.isRightClimberSwitchPressed()) {
             m_climbersubsystem.spinRightMotor(rightVal);
@@ -43,11 +43,7 @@ public class DefaultClimberCommand extends Command {
             m_climbersubsystem.spinRightMotor(rightVal);
         } else if (m_climbersubsystem.isRightClimberSwitchPressed() && rightVal > 0){
             m_climbersubsystem.stopRightMotor();
-        }
-
-        // m_climbersubsystem.spinLeftMotor(leftVal);
-        // m_climbersubsystem.spinRightMotor(rightVal);
-        
+        }        
     }
 
     @Override
