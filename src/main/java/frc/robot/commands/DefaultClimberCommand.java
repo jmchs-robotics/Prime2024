@@ -7,17 +7,13 @@ import edu.wpi.first.math.MathUtil;
 import frc.robot.subsystems.ClimberSubsystem;
 
 public class DefaultClimberCommand extends Command {
+    private final XboxController m_controller;
+    private final ClimberSubsystem m_climbersubsystem;
 
-    private final XboxController m_stick;
-    private final ClimberSubsystem m_subsystem;
-
-    public DefaultClimberCommand(ClimberSubsystem subsystem, XboxController stick) {
-
-        m_stick = stick;
-
-        m_subsystem = subsystem;
-        addRequirements(subsystem);
-
+    public DefaultClimberCommand(ClimberSubsystem climbersubsystem, XboxController controller) {
+        m_controller = controller;
+        m_climbersubsystem = climbersubsystem;
+        addRequirements(climbersubsystem);
     }
 
     @Override
@@ -25,11 +21,29 @@ public class DefaultClimberCommand extends Command {
 
     @Override
     public void execute() {
+        double leftVal = MathUtil.applyDeadband(m_controller.getLeftY() * 0.75, OIConstants.kDriveDeadband);
+        double rightVal = MathUtil.applyDeadband(m_controller.getRightY() * 0.75, OIConstants.kDriveDeadband);
 
-        // m_subsystem.spinLeftMotor(MathUtil.applyDeadband(m_stick.getLeftY() * 0.75, OIConstants.kDriveDeadband));
-        // m_subsystem.spinRightMotor(MathUtil.applyDeadband(m_stick.getRightY() * 0.75, OIConstants.kDriveDeadband));
-        
+        /* if the switch isn't pressed, climb freely
+         * else if the switch IS pressed, but you want to go up, you can do that
+         * else (meaning switch is pressed and you are still trying to go down), don't
+         */
 
+        if (!m_climbersubsystem.isLeftClimberSwitchPressed()) {
+            m_climbersubsystem.spinLeftMotor(leftVal);
+        } else if (m_climbersubsystem.isLeftClimberSwitchPressed() && leftVal < 0) {
+            m_climbersubsystem.spinLeftMotor(leftVal);
+        } else if (m_climbersubsystem.isLeftClimberSwitchPressed() && leftVal > 0){
+            m_climbersubsystem.stopLeftMotor();
+        }
+
+        if (!m_climbersubsystem.isRightClimberSwitchPressed()) {
+            m_climbersubsystem.spinRightMotor(rightVal);
+        } else if (m_climbersubsystem.isRightClimberSwitchPressed() && rightVal < 0) {
+            m_climbersubsystem.spinRightMotor(rightVal);
+        } else if (m_climbersubsystem.isRightClimberSwitchPressed() && rightVal > 0){
+            m_climbersubsystem.stopRightMotor();
+        }        
     }
 
     @Override
@@ -39,7 +53,6 @@ public class DefaultClimberCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        m_subsystem.stopBothMotors();
+        m_climbersubsystem.stopBothMotors();
     }
-    
 }

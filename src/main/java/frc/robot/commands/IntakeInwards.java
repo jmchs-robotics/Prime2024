@@ -1,17 +1,14 @@
 package frc.robot.commands;
 
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class IntakeInwards extends Command {
-    
-    private final Intake m_subsystem;
+    private final IntakeSubsystem m_intakesubsystem;
 
-    public IntakeInwards (Intake subsystem) {
-
-        m_subsystem = subsystem;
-        addRequirements(subsystem);
-
+    public IntakeInwards (IntakeSubsystem intakesubsystem) {
+        m_intakesubsystem = intakesubsystem;
+        addRequirements(intakesubsystem);
     }
 
     @Override
@@ -19,19 +16,18 @@ public class IntakeInwards extends Command {
 
     @Override
     public void execute () {
-        m_subsystem.setIntake(0.15);
-        m_subsystem.setIndex(0.2);
+        m_intakesubsystem.setIntake(0.15);
+        m_intakesubsystem.setIndex(0.2);
     }
 
     @Override
     public boolean isFinished () {
-        return false;
+        return m_intakesubsystem.isBeamBreakTripped();
     }
 
     @Override
     public void end (boolean interrupted) {
-        m_subsystem.stopIntake();
-        m_subsystem.stopIndex();
+        m_intakesubsystem.stopIntake();
+        m_intakesubsystem.stopIndex();
     }
-    
 }

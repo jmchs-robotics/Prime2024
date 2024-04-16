@@ -67,9 +67,10 @@ public final class Constants {
 
     public static final boolean kGyroReversed = false;
 
+    // TODO: Tune these PID values
     public static final HolonomicPathFollowerConfig pathConfig = new HolonomicPathFollowerConfig(
-      new PIDConstants(0.07, 0, 0),
-      new PIDConstants(0.15, 0, 0),
+      new PIDConstants(1.7, 0.05, 0.2),
+      new PIDConstants(2.1, 0.05, 0.2),
       5,
       Units.inchesToMeters(18.03),
       new ReplanningConfig()
@@ -113,7 +114,7 @@ public final class Constants {
     public static final double kDrivingMinOutput = -1;
     public static final double kDrivingMaxOutput = 1;
 
-    public static final double kTurningP = 1;
+    public static final double kTurningP = 0.75;
     public static final double kTurningI = 0;
     public static final double kTurningD = 0;
     public static final double kTurningFF = 0;
@@ -167,11 +168,19 @@ public final class Constants {
     public static final int rightIntakeID = 3;
     public static final int leftIntakeID = 4;
     public static final int indexID = 7;
+    public static final int beamBreakPort = 0;
   }
 
   public static final class ClimberConstants {
     public static final int rightClimberID = 5;
     public static final int leftClimberID = 6;
+    public static final int leftClimberSwitchPort = 2;
+    public static final int rightClimberSwitchPort = 6;
+  }
+
+  public static final class AmpConstants {
+    public static final int ampMotorID = 8;
+    public static final int ampSwitchPort = 4;
   }
   
 }

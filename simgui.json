@@ -2,7 +2,16 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/SmartDashboard/Path Chosen": "String Chooser"
+      "/Shuffleboard/Auto Tab/Field": "Field2d",
+      "/SmartDashboard/Path Chosen": "String Chooser",
+      "/SmartDashboard/SendableChooser[0]": "String Chooser"
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "FMSInfo": {
+        "open": true
+      }
     }
   },
   "NetworkTables Info": {
