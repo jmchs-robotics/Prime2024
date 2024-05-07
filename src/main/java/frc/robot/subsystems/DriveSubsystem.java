@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -77,16 +79,31 @@ public class DriveSubsystem extends SubsystemBase {
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
-  // Odometry class for tracking robot pose
-  SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
-      DriveConstants.kDriveKinematics,
-      Rotation2d.fromDegrees(m_gyro.getYaw()),
-      new SwerveModulePosition[] {
-          m_frontLeft.getPosition(),
-          m_frontRight.getPosition(),
-          m_rearLeft.getPosition(),
-          m_rearRight.getPosition()
-      });
+  // // Odometry class for tracking robot pose
+  // SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
+  //     DriveConstants.kDriveKinematics,
+  //     Rotation2d.fromDegrees(m_gyro.getYaw()),
+  //     new SwerveModulePosition[] {
+  //         m_frontLeft.getPosition(),
+  //         m_frontRight.getPosition(),
+  //         m_rearLeft.getPosition(),
+  //         m_rearRight.getPosition()
+  //     });
+
+  // We use vision so we can do the pose estimator instead of odometry
+  SwerveDrivePoseEstimator m_poseEstimator = new SwerveDrivePoseEstimator(
+    DriveConstants.kDriveKinematics,
+    Rotation2d.fromDegrees(-m_gyro.getYaw()),
+    new SwerveModulePosition[] {
+      m_frontLeft.getPosition(),
+      m_frontRight.getPosition(),
+      m_rearLeft.getPosition(),
+      m_rearRight.getPosition()
+    },
+    new Pose2d(),
+    VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
+    VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30))
+  );
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -95,15 +112,26 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // Update the odometry in the periodic block
-    m_odometry.update(
-        Rotation2d.fromDegrees(-m_gyro.getYaw()),
-        new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
-        });
+    updatePoseEstimate();
+  }
+
+  public void updatePoseEstimate() {
+    m_poseEstimator.update(
+      Rotation2d.fromDegrees(-m_gyro.getYaw()), 
+      new SwerveModulePosition[] {
+        m_frontLeft.getPosition(),
+        m_frontRight.getPosition(),
+        m_rearLeft.getPosition(),
+        m_rearRight.getPosition()
+      });
+    
+    if (LimelightHelpers.getTV("limelight")) {
+      m_poseEstimator.addVisionMeasurement(
+        LimelightHelpers.getBotPose2d("limelight"),
+        Timer.getFPGATimestamp()
+      );
+    }
+    
   }
 
   /**
@@ -112,7 +140,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The pose.
    */
   public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
+    return m_poseEstimator.getEstimatedPosition();
   }
 
   /**
@@ -121,7 +149,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param pose The pose to which to set the odometry.
    */
   public void resetOdometry(Pose2d pose) {
-    m_odometry.resetPosition(
+    m_poseEstimator.resetPosition(
         Rotation2d.fromDegrees(-m_gyro.getYaw()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
