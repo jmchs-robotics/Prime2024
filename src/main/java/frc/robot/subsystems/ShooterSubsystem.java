@@ -36,8 +36,8 @@ public class ShooterSubsystem extends SubsystemBase {
         // leftShooterMotor.setNeutralMode(NeutralModeValue.Coast);
         leftShooterMotor.setIdleMode(IdleMode.kCoast);
 
-        rightShooterMotor.setOpenLoopRampRate(1);
-        leftShooterMotor.setOpenLoopRampRate(1);
+        rightShooterMotor.setOpenLoopRampRate(0.75);
+        leftShooterMotor.setOpenLoopRampRate(0.75);
 
         rightShooterMotor.burnFlash();
         leftShooterMotor.burnFlash();

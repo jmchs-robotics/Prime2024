@@ -175,7 +175,7 @@ public final class Constants {
     public static final int rightClimberID = 5;
     public static final int leftClimberID = 6;
     public static final int leftClimberSwitchPort = 2;
-    public static final int rightClimberSwitchPort = 6;
+    public static final int rightClimberSwitchPort = 1;
   }
 
   public static final class AmpConstants {

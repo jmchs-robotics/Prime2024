@@ -19,6 +19,7 @@ public class ClimbBothDown extends Command {
 
     @Override
     public void execute() {
+        
         if (!m_climbersubsystem.isLeftClimberSwitchPressed()) {
             m_climbersubsystem.spinLeftMotor(0.75);
         } else {

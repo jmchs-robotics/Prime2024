@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.util.EnumSet;
 import java.util.Map;
 
 import com.pathplanner.lib.auto.NamedCommands;
@@ -11,6 +12,9 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTableEvent.Kind;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -52,6 +56,7 @@ public class RobotContainer {
   
   JoystickButton driveA = new JoystickButton(driveStick, XboxController.Button.kA.value);
   JoystickButton driveStart = new JoystickButton(driveStick, XboxController.Button.kStart.value);
+  JoystickButton driveBack = new JoystickButton(driveStick, XboxController.Button.kBack.value);
   JoystickButton driveLB = new JoystickButton(driveStick, XboxController.Button.kLeftBumper.value);
   JoystickButton driveRB = new JoystickButton(driveStick, XboxController.Button.kRightBumper.value);
   JoystickButton subA = new JoystickButton(subStick, XboxController.Button.kA.value);
@@ -132,6 +137,10 @@ public class RobotContainer {
       new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive)
     );
 
+    driveBack.onTrue(
+      new InstantCommand(() -> {m_intake.toggleBeamBreak();}, m_intake)
+    );
+
     driveLB.whileTrue(
       new LimelightAiming(m_robotDrive, driveStick)
     );
@@ -187,5 +196,25 @@ public class RobotContainer {
       .withPosition(2, 0)
       .withSize(7, 5)
       .withWidget(BuiltInWidgets.kCameraStream);
+
+    // driveTab.add("Use BeamBreak", true)
+    //   .withPosition(9, 0)
+    //   .withSize(1, 1)
+    //   .withWidget(BuiltInWidgets.kToggleSwitch);
+
+    // NetworkTable driveTable = NetworkTableInstance.getDefault().getTable("Shuffleboard").getSubTable("Drive Tab");
+
+    // driveTable.addListener(
+    //   "Use BeamBreak",
+    //   EnumSet.of(Kind.kValueAll),
+    //   (table, key, event) -> {
+    //     m_intake.toggleBeamBreak();
+    //   });
+
+    driveTab.addBoolean("Is Using BeamBreak",
+      () -> {return m_intake.isUsingBeamBreak();})
+      .withPosition(9, 0)
+      .withSize(1, 1)
+      .withWidget(BuiltInWidgets.kBooleanBox);
   }
 }

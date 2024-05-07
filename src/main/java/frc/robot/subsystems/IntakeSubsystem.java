@@ -17,6 +17,7 @@ public class IntakeSubsystem extends SubsystemBase {
     private final TalonFX indexMotor;
 
     private final DigitalInput beamBreak;
+    private boolean useBeamBreak = true;
 
     // private final CANSparkMax indexMotor;
 
@@ -66,5 +67,17 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public boolean isBeamBreakTripped() {
         return !beamBreak.get();
+    }
+
+    public void toggleBeamBreak() {
+        if (useBeamBreak) {
+            useBeamBreak = false;
+        } else {
+            useBeamBreak = true;
+        }
+    }
+
+    public boolean isUsingBeamBreak() {
+        return useBeamBreak;
     }
 }
