@@ -6,7 +6,12 @@ package frc.robot;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -75,6 +80,12 @@ public final class Constants {
       Units.inchesToMeters(18.03),
       new ReplanningConfig()
     );
+
+    public static final Transform3d kRobotToCam =
+      new Transform3d(new Translation3d(0.321, 0.1, 0.507), new Rotation3d(0, Units.degreesToRadians(55), 0));
+
+    public static final AprilTagFieldLayout kTagLayout =
+      AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
   }
 
   public static final class ModuleConstants {

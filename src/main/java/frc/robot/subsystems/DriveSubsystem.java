@@ -11,7 +11,9 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -21,6 +23,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.WPIUtilJNI;
 
 import java.util.Map;
+
+import org.photonvision.PhotonCamera;
 
 // import edu.wpi.first.wpilibj.ADIS16470_IMU;
 // import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
@@ -105,6 +109,8 @@ public class DriveSubsystem extends SubsystemBase {
     VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30))
   );
 
+  PhotonCamera camera = new PhotonCamera("shooter_cam");
+
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     configPathPlanner();
@@ -125,13 +131,20 @@ public class DriveSubsystem extends SubsystemBase {
         m_rearRight.getPosition()
       });
     
-    if (LimelightHelpers.getTV("limelight")) {
+    var res = camera.getLatestResult();
+    if (res.hasTargets()) {
+      var imageCaptureTime = res.getTimestampSeconds();
+      var camToTargetTrans = res.getBestTarget().getBestCameraToTarget();
+      var aprilTagID = res.getBestTarget().getFiducialId()
+
       m_poseEstimator.addVisionMeasurement(
-        LimelightHelpers.getBotPose2d("limelight"),
-        Timer.getFPGATimestamp()
-      );
-    }
-    
+        getFieldToRobot(camToTargetTrans, DriveConstants.kTagLayout.getTagPose(aprilTagID), DriveConstants.kRobotToCam).toPose2d(), 
+        imageCaptureTime);
+    }    
+  }
+
+  public Transform3d getFieldToRobot(Transform3d camToTag, Transform3d fieldToTag, Transform3d camToRobot) {
+    return fieldToTag.plus(camToTag.inverse()).plus(camToRobot);
   }
 
   /**
