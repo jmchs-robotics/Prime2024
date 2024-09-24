@@ -17,7 +17,7 @@ public class FlipAmpForward extends Command {
 
     @Override
     public void execute() {
-        m_ampSubsystem.setAmpMotor(0.1);
+        m_ampSubsystem.setAmpMotor(0.4);
     }
 
     @Override

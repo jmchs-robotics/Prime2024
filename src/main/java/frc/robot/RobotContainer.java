@@ -125,8 +125,8 @@ public class RobotContainer {
       new ReverseShooter(m_shooter)
     );
 
-    subStart.whileTrue(
-      new FlipAmpForward(m_amp)
+    subStart.onTrue(
+      new FlipAmpForward(m_amp).withTimeout(0.1)
     );
 
     subBack.whileTrue(
