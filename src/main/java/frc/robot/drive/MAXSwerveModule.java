@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.drive;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -12,23 +12,19 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Constants.ModuleConstants;
-import com.revrobotics.CANSparkBase.ControlType;
 
 public class MAXSwerveModule {
   private final CANSparkFlex m_drivingSparkMax;
   private final CANSparkFlex m_turningSparkMax;
 
-  public final RelativeEncoder m_drivingEncoder; // change back later :3
-  public final AbsoluteEncoder m_turningEncoder; // made it public for testing
+  private final RelativeEncoder m_drivingEncoder;
+  private final AbsoluteEncoder m_turningEncoder;
 
   private final SparkPIDController m_drivingPIDController;
   private final SparkPIDController m_turningPIDController;
 
   private double m_chassisAngularOffset = 0;
   private SwerveModuleState m_desiredState = new SwerveModuleState(0.0, new Rotation2d());
-  
-  private double lastTargetAngle = 0;
-  private double m_autoDist = 0;
 
   /**
    * Constructs a MAXSwerveModule and configures the driving and turning motor,

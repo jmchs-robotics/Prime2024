@@ -6,8 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -20,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-  private final SendableChooser<String> startPosChooser = new SendableChooser<>();
 
   private RobotContainer m_robotContainer;
 
@@ -35,15 +32,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    m_robotContainer.m_robotDrive.zeroHeading();
-    // CameraServer.startAutomaticCapture(); 
-
-    startPosChooser.setDefaultOption("Top Side Auto", "topSide");
-    startPosChooser.addOption("Bottom Side Auto", "bottomSide");
-    startPosChooser.addOption("Center Side Auto", "centerSide");
-    startPosChooser.addOption("Center Side Auto 3 Note Bottom", "centerSide3Bottom");
-
-    m_robotContainer.m_robotDrive.resetEncoders();
+    m_robotContainer.m_drive.zeroHeading();
+    m_robotContainer.m_drive.resetEncoders();
 
     Shuffleboard.selectTab("Auto Tab");
   }
@@ -62,7 +52,6 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    SmartDashboard.putData(startPosChooser);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -75,8 +64,6 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-
-    String startPos = startPosChooser.getSelected();
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 

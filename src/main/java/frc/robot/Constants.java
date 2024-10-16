@@ -67,7 +67,6 @@ public final class Constants {
 
     public static final boolean kGyroReversed = false;
 
-    // TODO: Tune these PID values
     public static final HolonomicPathFollowerConfig pathConfig = new HolonomicPathFollowerConfig(
       new PIDConstants(1.7, 0.05, 0.2),
       new PIDConstants(2.1, 0.05, 0.2),
@@ -128,12 +127,6 @@ public final class Constants {
     public static final int kTurningMotorCurrentLimit = 20; // amps
   }
 
-  public static final class OIConstants {
-    public static final int kDriverControllerPort = 0;
-    public static final int kOperatorControllerPort = 1;
-    public static final double kDriveDeadband = 0.15;
-  }
-
   public static final class AutoConstants {
     public static final double kMaxSpeedMetersPerSecond = 3;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
@@ -157,30 +150,6 @@ public final class Constants {
 
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
-  }
-
-  public static final class ShooterConstants {
-    public static final int rightShooterID = 1;
-    public static final int leftShooterID = 2;
-  }
-
-  public static final class IntakeConstants {
-    public static final int rightIntakeID = 3;
-    public static final int leftIntakeID = 4;
-    public static final int indexID = 7;
-    public static final int beamBreakPort = 0;
-  }
-
-  public static final class ClimberConstants {
-    public static final int rightClimberID = 5;
-    public static final int leftClimberID = 6;
-    public static final int leftClimberSwitchPort = 2;
-    public static final int rightClimberSwitchPort = 1;
-  }
-
-  public static final class AmpConstants {
-    public static final int ampMotorID = 8;
-    public static final int ampSwitchPort = 4;
   }
   
 }
