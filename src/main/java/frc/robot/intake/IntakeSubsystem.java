@@ -9,7 +9,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class IntakeSubsystem extends SubsystemBase {
     private final TalonFX rightIntakeMotor;
     private final TalonFX leftIntakeMotor;
-    private final TalonFX indexMotor;
+    private final TalonFX bottomIndexMotor;
+    private final TalonFX topIndexMotor;
 
     private final DigitalInput beamBreak;
     private boolean useBeamBreak = true;
@@ -17,15 +18,18 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeSubsystem() {
         rightIntakeMotor = new TalonFX(3);
         leftIntakeMotor = new TalonFX(4);
-        indexMotor = new TalonFX(7);
+        bottomIndexMotor = new TalonFX(7);
+        topIndexMotor = new TalonFX(8);
 
         rightIntakeMotor.setNeutralMode(NeutralModeValue.Coast);
         leftIntakeMotor.setNeutralMode(NeutralModeValue.Coast);
-        indexMotor.setNeutralMode(NeutralModeValue.Coast);
+        bottomIndexMotor.setNeutralMode(NeutralModeValue.Coast);
+        topIndexMotor.setNeutralMode(NeutralModeValue.Coast);
 
         rightIntakeMotor.setInverted(false);
         leftIntakeMotor.setInverted(false);
-        indexMotor.setInverted(true);
+        bottomIndexMotor.setInverted(true);
+        topIndexMotor.setInverted(true);
 
         beamBreak = new DigitalInput(0);
     }
@@ -47,11 +51,13 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void setIndex(double speed) {
-        indexMotor.set(speed);
+        bottomIndexMotor.set(speed);
+       topIndexMotor.set(speed);
     }
 
     public void stopIndex() {
-        indexMotor.stopMotor();
+        bottomIndexMotor.stopMotor();
+        topIndexMotor.stopMotor();
     }
 
     public boolean isBeamBreakTripped() {

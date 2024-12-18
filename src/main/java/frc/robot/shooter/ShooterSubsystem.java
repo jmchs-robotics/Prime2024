@@ -2,31 +2,24 @@ package frc.robot.shooter;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 public class ShooterSubsystem extends SubsystemBase {
 
-    private final CANSparkFlex rightShooterMotor;
-    private final CANSparkFlex leftShooterMotor;
+    private final TalonFX topShooterMotor;
+    private final TalonFX bottomShooterMotor;
 
     public ShooterSubsystem() {
 
-        rightShooterMotor = new CANSparkFlex(1, MotorType.kBrushless);
-        rightShooterMotor.setInverted(true);
+        topShooterMotor = new TalonFX(1);
+        topShooterMotor.setInverted(true);
 
-        leftShooterMotor = new CANSparkFlex(2, MotorType.kBrushless);
-        leftShooterMotor.setInverted(false);
+        bottomShooterMotor = new TalonFX(2);
+        bottomShooterMotor.setInverted(false);
 
-        rightShooterMotor.setIdleMode(IdleMode.kCoast);
-        leftShooterMotor.setIdleMode(IdleMode.kCoast);
-
-        rightShooterMotor.setOpenLoopRampRate(0.75);
-        leftShooterMotor.setOpenLoopRampRate(0.75);
-
-        rightShooterMotor.burnFlash();
-        leftShooterMotor.burnFlash();
+        topShooterMotor.setNeutralMode(NeutralModeValue.Coast);
+        bottomShooterMotor.setNeutralMode(NeutralModeValue.Coast);
     }
 
     @Override
@@ -35,29 +28,29 @@ public class ShooterSubsystem extends SubsystemBase {
     @Override
     public void simulationPeriodic() {}
 
-    public void setRightShooterMotor(double speed) {
-        rightShooterMotor.set(speed);
+    public void setTopShooterMotor(double speed) {
+        topShooterMotor.set(speed);
     }
 
-    public void stopRightShooterMotor() {
-        rightShooterMotor.stopMotor();
+    public void stopTopShooterMotor() {
+        topShooterMotor.stopMotor();
     }
 
-    public void setLeftShooterMotor(double speed) {
-        leftShooterMotor.set(speed);
+    public void setBottomShooterMotor(double speed) {
+        bottomShooterMotor.set(speed);
     }
 
-    public void stopLeftShooterMotor() {
-        leftShooterMotor.stopMotor();
+    public void stopBottomShooterMotor() {
+        bottomShooterMotor.stopMotor();
     }
 
     public void setBothShooterMotors(double speed) {
-        rightShooterMotor.set(speed);
-        leftShooterMotor.set(speed);
+        topShooterMotor.set(speed);
+        bottomShooterMotor.set(speed);
     }
 
     public void stopBothShooterMotors() {
-        rightShooterMotor.stopMotor();
-        leftShooterMotor.stopMotor();
+        topShooterMotor.stopMotor();
+        bottomShooterMotor.stopMotor();
     }
 }
